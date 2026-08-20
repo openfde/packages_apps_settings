@@ -191,7 +191,7 @@ public class SliderVolumizer implements OnSliderTouchListener, OnChangeListener,
         mCallback = callback;
         mOriginalStreamVolume = mAudioManager.getStreamVolume(mStreamType);
         mLastAudibleStreamVolume = mAudioManager.getLastAudibleStreamVolume(mStreamType);
-        mMuted = mAudioManager.isStreamMute(mStreamType);
+        mMuted = mAudioManager.isStreamMute(mStreamType) || mOriginalStreamVolume == mAudioManager.getStreamMinVolume(mStreamType);
         mPlaySample = playSample;
         if (mCallback != null) {
             mCallback.onMuted(mMuted, isZenMuted());
@@ -579,7 +579,7 @@ public class SliderVolumizer implements OnSliderTouchListener, OnChangeListener,
         if (mSlider != null && mAudioManager != null) {
             final int volume = mAudioManager.getStreamVolume(mStreamType);
             final int lastAudibleVolume = mAudioManager.getLastAudibleStreamVolume(mStreamType);
-            final boolean mute = mAudioManager.isStreamMute(mStreamType);
+            final boolean mute = mAudioManager.isStreamMute(mStreamType) || volume == 0;
             mUiHandler.postUpdateSlider(volume, lastAudibleVolume, mute);
         }
     }

@@ -134,7 +134,16 @@ class MediaVolumePreference(private val audioHelper: AudioHelper) :
         (preference as VolumeSliderPreference).apply {
             setStream(STREAM_MUSIC)
             setMuteIcon(R.drawable.ic_media_stream_off)
-            setListener { updateContentDescription(this) }
+            setListener {
+                updateContentDescription(this)
+
+                val iconRes = if (isMuted()) {
+                    R.drawable.ic_media_stream_off
+                } else {
+                    R.drawable.ic_media_stream
+                }
+                showIcon(iconRes)
+            }
         }
     }
 
