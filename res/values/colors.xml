@@ -328,4 +328,18 @@
     <color name="sc_materialColorSurfaceContainer">@android:color/system_surface_container_light</color>
     <color name="sc_materialColorOutline">@android:color/system_outline_light</color>
     <color name="sc_materialColorOutlineVariant">@android:color/system_outline_variant_light</color>
+    
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="app_black_light">#333333</color>
+    <color name="app_gray_dark">#666666</color>
+    <color name="app_blue_light">#008ED2</color>
+    <color name="app_gray">#999999</color>
+    <color name="blue"> #1E88E5 </color>
+    <color name="main_bg"> #f2f2f2 </color>
+    <color name="page_bg"> #f2f2f2 </color>
+    <color name="dark_text"> #333 </color>
+    <color name="mid_text"> #666 </color>
+    <color name="light_text"> #999 </color>
+    <color name="homepage_compatible_background">#3D9140</color>
 </resources>

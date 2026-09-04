@@ -5479,7 +5479,13 @@
     <!-- On Languages & input settings screen, setting summary.  Setting to redirect vibration to input devices. [CHAR LIMIT=100] -->
     <string name="vibrate_input_devices_summary">Send vibration to game controller when connected</string>
 
-    <!-- Keyboard Layout Picker -->
+    <string name="keyboard_layout_dialog_title">Choose keyboard layout</string>
+    <!-- Button to configure keyboard layouts.  [CHAR LIMIT=35] -->
+    <string name="keyboard_layout_dialog_setup_button">Set up keyboard layouts</string>
+    <!-- Hint describing how to switch keyboard layouts using the keyboard.  [CHAR LIMIT=48] -->
+    <string name="keyboard_layout_dialog_switch_hint">To switch, press Control-Spacebar</string>
+    <!-- Label of the default keyboard layout.  [CHAR LIMIT=35] -->
+    <string name="keyboard_layout_default_label">Default</string>
     <skip />
     <!-- Title for the keyboard layout picker activity. [CHAR LIMIT=35] -->
     <string name="keyboard_layout_picker_title">Keyboard layouts</string>
@@ -15590,4 +15596,96 @@
     <!-- Search keywords for Human interface device access setting -->
     <string name="keywords_access_hid">hid, human, access, device</string>
     <!-- Access HID end -->
+    
+    
+         <!-- fde net text  -->
+     <string name="fde_wifi_name">"Network SSID"</string>
+     <string name="fde_wifi_password">"password"</string>
+     <string name="fde_wifi_encryption">"encryption"</string>
+     <string name="fde_enter_wifi_name">"Enter Network SSID"</string>
+     <string name="fde_enter_wifi_password">"Enter password"</string>
+     <string name="fde_enter_wifi_name_and_password">"Enter Network SSID And password"</string>
+     <string name="fde_wifi">WIFI</string>
+     <string name="fde_ethernet">Ethernet</string>
+     <string name="fde_ethernet_and_wifi">Ethernet and WIFI</string>
+     <string name="fde_add_wifi">ADD NETWORK</string>
+     <string name="fde_manuals_add_wifi">ADD NETWORK...</string>
+     <string name="fde_choose_nearby_wifi">AVAILABLE NETWORKS</string>
+     <string name="fde_btn_cancel">Cancel</string>
+     <string name="fde_btn_confirm">OK</string>
+     <string name="fde_btn_operating_error">You are operating too fast</string>
+     <string name="fde_scanning">Scanning</string>
+     <string name="fde_connecting">Connecting</string>
+     <string name="fde_wifi_connect" >"connect"</string>
+     <string name="fde_wifi_disconnect" >"disconnect"</string>
+     <string name="fde_forget">Forget</string>
+     <string name="fde_del_network">delete network</string>
+     <string name="fde_unconnect">disconnect network</string>
+     <string name="fde_no_save">Do not save</string>
+     <string name="fde_has_connected">connected</string>
+     <string name="fde_has_disconnected">disconnected</string>
+     <string name="fde_has_saved">saved</string>
+     <string name="fde_no_wifi_module">no wifi module</string>
+     <string name="fde_net_mask" >"mask"</string>
+     <string name="fde_net_input_mask" >"enter mask"</string>
+     <string name="fde_net_invalid_mask" >"invalid mask"</string>
+     <string name="fde_net_disconnect_tips" >"Do you want to disconnect the network?"</string>
+     <string name="fde_net_connect_tips" >"Do you want to connect to this network?"</string>
+     <string name="fde_net_connect_wifi" >"Wifi"</string>
+     <string name="fde_net_connect_wired" >"Wired"</string>
+     <string name="open_wifi" >"Open Wi-Fi"</string>
+     <string name="fde_net_saved_network" >"Saved Network"</string>
+     <string name="fde_net_none" >"None"</string>
+     <string name="fde_net_other_networks" >"Other Network"</string>
+     <string name="fde_net_add_networks" >"Add Network"</string>
+     <string name="fde_net_networks" >"Network"</string>
+     <string name="fde_net_config" >"Config"</string>
+
+     <string name="fde_compatible_set">Compatible Set</string>
+     <string name="fde_compatible_unset">Disable</string>
+     <string name="fde_compatible_summary">App Compatible Set</string>
+     <string name="fde_input_hint">Please input data</string>
+     <string name="fde_input_appname_hint">Please input App Name</string>
+     <string name="fde_app_name_title">AppName</string>
+     <string name="fde_data_value">Value</string>
+     <string name="fde_switch">Switch</string>
+     <string name="fde_tips">Warning</string>
+     <string name="fde_clean_tips">Is all clean ?</string>
+     <string name="fde_reset_tips">Restore the default configuration?</string>
+     <string name="fde_sync_config_from_gitee">Do you want to synchronize the latest configuration from Server?</string>
+     <string name="set_gps_info">Set GPS info</string>
+     <string name="set_success">Set success</string>
+     <string name="fde_country">Country</string>
+     <string name="fde_province">Province</string>
+     <string name="fde_city">City</string>
+
+     <string name="configurable_interfaces">Configurable interfaces</string>
+     <string name="ip_settings">IP Settings</string>
+     <string name="ip_address">IP Address</string>
+     <string name="default_gateway">default gateway</string>
+     <string name="subnet_mask">Subnet Mask</string>
+     <string name="preferred_dns">Preferred DNS</string>
+     <string name="alternative_dns">Alternative DNS</string>
+
+     <string name="fde_version">OpenFDE Version</string>
+
+     <string-array name="spinner_ip">
+          <item>"        DHCP"</item>
+          <item>"Manual Input"</item>
+      </string-array>
+  
+    <string name="dock_size" msgid="570613010306330622">"Dock size"</string>
+    <string name="short_summary_dock_size" msgid="8444689613442419978">"Make Dock bigger or smaller"</string>
+    <string name="format_error">" Format error"</string>
+    <string name="save_success">Saved successfully</string>
+
+    <string name="show_smallest">"Smallest"</string>
+    <string name="show_smaller">"Smaller"</string>
+    <string name="show_small">"Small"</string>
+    <string name="show_center_small">"Center"</string>
+    <string name="show_recommend">"Recommend"</string>
+    <string name="show_bigger">"Bigger"</string>
+    <string name="show_big">"Big"</string>
+
+    
 </resources>

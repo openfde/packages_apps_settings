@@ -818,4 +818,14 @@ public class Settings extends SettingsActivity {
             }
         }
     }
+
+    public static class CompatibleSetActivity extends SettingsActivity {
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setTheme(android.R.styleable.Theme_windowNoTitle);
+            // showTitle(false);
+            setTitle(R.string.fde_compatible_set);
+        }
+    }
 }

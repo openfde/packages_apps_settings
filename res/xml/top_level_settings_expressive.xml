@@ -116,6 +116,15 @@
             android:summary="@string/wallpaper_dashboard_summary"
             settings:highlightableMenuKey="@string/menu_key_wallpaper"
             settings:controller="com.android.settings.display.TopLevelWallpaperPreferenceController"/>
+
+        <com.android.settings.widget.HomepagePreference
+            android:fragment="com.android.settings.compatible.SetCompatibleFragment"
+            android:icon="@drawable/ic_settings_compatible"
+            android:key="top_level_battery"
+            android:order="-5"
+            android:title="@string/fde_compatible_set"
+            android:summary="@string/summary_placeholder"
+            settings:highlightableMenuKey="@string/menu_key_battery"/>    
     </com.android.settingslib.widget.UntitledPreferenceCategory>
 
     <com.android.settingslib.widget.UntitledPreferenceCategory
@@ -196,14 +205,13 @@
             settings:controller="com.android.settings.privacy.TopLevelPrivacyEntryPreferenceController"/>
 
         <com.android.settings.widget.HomepagePreference
-            android:fragment="com.android.settings.location.LocationSettings"
+            android:fragment="com.android.settings.location.fde.LocationSettings"
             android:icon="@drawable/ic_homepage_location"
             android:key="top_level_location"
             android:order="-20"
             android:title="@string/location_settings_title"
             android:summary="@string/location_settings_loading_app_permission_stats"
-            settings:highlightableMenuKey="@string/menu_key_location"
-            settings:controller="com.android.settings.location.TopLevelLocationPreferenceController"/>
+            settings:highlightableMenuKey="@string/menu_key_location"/>   
 
         <com.android.settings.widget.HomepagePreference
             android:fragment="com.android.settings.accounts.AccountDashboardFragment"

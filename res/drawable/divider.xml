@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <size android:height="1dp" /> <!-- 分隔线的高度 -->
+    <solid android:color="#ffF0F2F5" /> <!-- 分隔线的颜色 -->
+</shape>

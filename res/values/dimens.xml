@@ -602,4 +602,16 @@
     <dimen name="bluetooth_battery_indicator_battery_meter_height">16dp</dimen>
     <dimen name="bluetooth_battery_indicator_charging_icon_width">12dp</dimen>
     <dimen name="bluetooth_battery_indicator_charging_icon_height">16dp</dimen>
+    
+    <dimen name="all_apps_item_height">48dp</dimen>
+    <dimen name="settings_item_height">60dp</dimen>
+    <dimen name="compatible_icon_size">32dp</dimen>
+    <dimen name="compatible_padding">16dp</dimen>
+    <dimen name="compatible_icon_small_size">28dp</dimen>
+
+    <dimen name="fde_medium_text">16sp</dimen>
+    <dimen name="fde_min_text">12sp</dimen>
+    <dimen name="fde_max_text">20sp</dimen>
+    <dimen name="fde_large_text">18sp</dimen>
+    <dimen name="fde_light_text">14sp</dimen>
 </resources>

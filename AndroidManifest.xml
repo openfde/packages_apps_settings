@@ -152,6 +152,8 @@
     <uses-permission android:name="android.permission.MANAGE_COMPANION_DEVICES" />
     <uses-permission android:name="android.permission.CONTROL_SIM_AUTO_PIN_MANAGEMENT" />
     <uses-permission android:name="android.permission.MANAGE_COMPUTER_CONTROL_CONSENT" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+	
 
     <application
             android:name=".SettingsApplication"
@@ -161,6 +163,7 @@
             android:hardwareAccelerated="true"
             android:requiredForAllUsers="true"
             android:supportsRtl="true"
+ 	    android:debuggable="true"
             android:backupAgent="com.android.settings.backup.SettingsBackupHelper"
             android:restoreAnyVersion="true"
             android:usesCleartextTraffic="true"
@@ -2313,7 +2316,7 @@
                 <category android:name="com.android.settings.SHORTCUT" />
             </intent-filter>
             <meta-data android:name="com.android.settings.FRAGMENT_CLASS"
-                android:value="com.android.settings.location.LocationSettings" />
+                android:value="com.android.settings.location.fde.LocationSettings" />
             <meta-data android:name="com.android.settings.HIGHLIGHT_MENU_KEY"
                        android:value="@string/menu_key_location"/>
             <meta-data android:name="com.android.settings.PRIMARY_PROFILE_CONTROLLED"
@@ -2464,6 +2467,7 @@
         <activity android:name="Settings$PrivacyDashboardActivity"
                   android:label="@string/privacy_dashboard_title"
                   android:exported="true"
+                  android:documentLaunchMode="always"
                   android:icon="@drawable/ic_settings_privacy">
             <intent-filter>
                 <action android:name="android.settings.PRIVACY_SETTINGS" />
@@ -2475,7 +2479,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <meta-data android:name="com.android.settings.FRAGMENT_CLASS"
-                       android:value="com.android.settings.privacy.PrivacyDashboardFragment" />
+                       android:value="com.android.settings.compatible.SetCompatibleFragment" />
             <meta-data android:name="com.android.settings.HIGHLIGHT_MENU_KEY"
                        android:value="@string/menu_key_privacy"/>
             <meta-data android:name="com.android.settings.PRIMARY_PROFILE_CONTROLLED"
@@ -4383,7 +4387,7 @@
                        android:value="@string/menu_key_apps"/>
         </activity>
 
-        <activity
+        <!-- <activity
             android:name="Settings$SoundSettingsActivity"
             android:label="@string/sound_settings"
             android:icon="@drawable/ic_homepage_sound"
@@ -4408,7 +4412,7 @@
             <meta-data
                 android:name="com.android.settings.PRIMARY_PROFILE_CONTROLLED"
                 android:value="true" />
-        </activity>
+        </activity> -->
 
         <activity
             android:name="Settings$VibrationSettingsActivity"
@@ -5839,6 +5843,14 @@
             </intent-filter>
         </receiver>
 
+        <receiver
+            android:name=".compatible.BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
         <activity
             android:name=".spa.SpaActivity"
             android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize"

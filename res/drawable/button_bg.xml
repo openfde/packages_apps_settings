@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+  <!-- 状态1：鼠标悬停 (API Level 14及以上) -->
+  <item android:state_hovered="true">
+    <shape>
+      <solid android:color="#0f000000" /> <!-- 悬停时的背景色 -->
+      <corners android:radius="6dp" /> <!-- 圆角（可选） -->
+    </shape>
+  </item>
+
+  <!-- 状态2：按下 -->
+  <item android:state_pressed="true">
+    <shape>
+      <solid android:color="#1f000000" /> <!-- 按下时的背景色 -->
+      <corners android:radius="6dp" />
+    </shape>
+  </item>
+
+  <item android:state_selected="true">
+    <shape>
+      <solid android:color="#1f000000" /> <!-- 按下时的背景色 -->
+      <corners android:radius="6dp" />
+    </shape>
+  </item>
+
+  <item android:state_activated="true">
+    <shape>
+      <solid android:color="#1f000000" /> <!-- 选中时的背景色 -->
+      <corners android:radius="6dp" />
+    </shape>
+  </item>
+
+  <!-- 状态3：默认状态（必须放在最后） -->
+  <item android:state_hovered="false" android:state_pressed="false">
+    <shape>
+      <solid android:color="@android:color/transparent" /> <!-- 默认背景色 -->
+      <corners android:radius="0dp" />
+    </shape>
+  </item>
+</selector>
