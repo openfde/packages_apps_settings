@@ -27,8 +27,9 @@
     <com.android.settingslib.widget.UntitledPreferenceCategory
         android:order="-130"
         android:key="top_level_connectivity_category">
+
         <com.android.settings.widget.HomepagePreference
-            android:fragment="com.android.settings.network.NetworkDashboardFragment"
+            android:fragment="com.android.settings.network.fde.FdeNetworkDashboardFragment"
             android:icon="@drawable/ic_homepage_network"
             android:key="top_level_network"
             android:order="-20"
@@ -78,7 +79,7 @@
             android:summary="@string/sound_dashboard_summary"
             settings:highlightableMenuKey="@string/menu_key_sound" />
 
-        <com.android.settings.widget.RestrictedHomepagePreference
+        <!-- <com.android.settings.widget.RestrictedHomepagePreference
             android:fragment="com.android.settings.notification.modes.ZenModesListFragment"
             android:icon="@drawable/ic_homepage_modes"
             android:key="top_level_priority_modes"
@@ -86,7 +87,7 @@
             android:title="@string/zen_modes_list_title"
             settings:useAdminDisabledSummary="true"
             settings:highlightableMenuKey="@string/menu_key_priority_modes"
-            settings:controller="com.android.settings.notification.modes.ZenModesLinkPreferenceController"/>
+            settings:controller="com.android.settings.notification.modes.ZenModesLinkPreferenceController"/> -->
 
         <com.android.settings.widget.HomepagePreference
             android:fragment="com.android.settings.communal.CommunalDashboardFragment"
@@ -119,7 +120,7 @@
 
         <com.android.settings.widget.HomepagePreference
             android:fragment="com.android.settings.compatible.SetCompatibleFragment"
-            android:icon="@drawable/ic_settings_compatible"
+            android:icon="@drawable/ic_settings_emergency_filled"
             android:key="top_level_battery"
             android:order="-5"
             android:title="@string/fde_compatible_set"
@@ -141,7 +142,7 @@
             settings:highlightableMenuKey="@string/menu_key_storage"
             settings:controller="com.android.settings.deviceinfo.TopLevelStoragePreferenceController"/>
 
-        <com.android.settings.widget.HomepagePreference
+        <!-- <com.android.settings.widget.HomepagePreference
             android:fragment="com.android.settings.fuelgauge.batteryusage.PowerUsageSummary"
             android:icon="@drawable/ic_homepage_battery"
             android:key="top_level_battery"
@@ -149,7 +150,7 @@
             android:title="@string/power_usage_summary_title"
             android:summary="@string/summary_placeholder"
             settings:highlightableMenuKey="@string/menu_key_battery"
-            settings:controller="com.android.settings.fuelgauge.TopLevelBatteryPreferenceController"/>
+            settings:controller="com.android.settings.fuelgauge.TopLevelBatteryPreferenceController"/> -->
 
         <com.android.settings.widget.HomepagePreference
             android:fragment="com.android.settings.system.SystemDashboardFragment"
@@ -210,21 +211,20 @@
             android:key="top_level_location"
             android:order="-20"
             android:title="@string/location_settings_title"
-            android:summary="@string/location_settings_loading_app_permission_stats"
             settings:highlightableMenuKey="@string/menu_key_location"/>   
 
-        <com.android.settings.widget.HomepagePreference
+        <!-- <com.android.settings.widget.HomepagePreference
             android:fragment="com.android.settings.accounts.AccountDashboardFragment"
             android:icon="@drawable/ic_homepage_accounts"
             android:key="top_level_accounts"
             android:order="-10"
             android:summary="@string/summary_placeholder"
             settings:highlightableMenuKey="@string/menu_key_accounts"
-            settings:controller="com.android.settings.accounts.TopLevelAccountEntryPreferenceController"/>
+            settings:controller="com.android.settings.accounts.TopLevelAccountEntryPreferenceController"/> -->
 
         <!-- TODO(b/460772532): Set highlightableMenuKey to menu_key_accounts once this screen
                 is ready to display user's accounts instead of AccountDashboardFragment. -->
-        <com.android.settings.widget.HomepagePreference
+        <!-- <com.android.settings.widget.HomepagePreference
             android:fragment="com.android.settings.backup.AccountsAndBackupDashboardFragment"
             android:icon="@drawable/ic_homepage_accounts_and_backup"
             android:key="top_level_accounts_and_backup"
@@ -251,7 +251,7 @@
             android:order="10"
             android:fragment="com.android.settings.emergency.EmergencyDashboardFragment"
             settings:isPreferenceVisible="@bool/config_show_emergency_settings"
-            settings:highlightableMenuKey="@string/menu_key_emergency"/>
+            settings:highlightableMenuKey="@string/menu_key_emergency"/> -->
     </com.android.settingslib.widget.UntitledPreferenceCategory>
 
     <com.android.settingslib.widget.UntitledPreferenceCategory

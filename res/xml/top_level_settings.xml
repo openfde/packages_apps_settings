@@ -30,9 +30,10 @@
         android:order="-130"
         android:key="top_level_connectivity_category"
         android:layout="@layout/settingslib_expressive_untitled_preference_category">
+
         <com.android.settings.widget.HomepagePreference
-            android:fragment="com.android.settings.network.NetworkDashboardFragment"
-            android:icon="@drawable/ic_settings_wireless_filled"
+            android:fragment="com.android.settings.network.fde.FdeNetworkDashboardFragment"
+            android:icon="@drawable/ic_homepage_network"
             android:key="top_level_network"
             android:order="-20"
             android:title="@string/network_dashboard_title"
@@ -82,7 +83,7 @@
             android:summary="@string/sound_dashboard_summary"
             settings:highlightableMenuKey="@string/menu_key_sound"/> -->
 
-        <com.android.settings.widget.RestrictedHomepagePreference
+        <!-- <com.android.settings.widget.RestrictedHomepagePreference
             android:fragment="com.android.settings.notification.modes.ZenModesListFragment"
             android:icon="@*android:drawable/ic_zen_priority_modes"
             android:key="top_level_priority_modes"
@@ -90,7 +91,7 @@
             android:title="@string/zen_modes_list_title"
             settings:useAdminDisabledSummary="true"
             settings:highlightableMenuKey="@string/menu_key_priority_modes"
-            settings:controller="com.android.settings.notification.modes.ZenModesLinkPreferenceController"/>
+            settings:controller="com.android.settings.notification.modes.ZenModesLinkPreferenceController"/> -->
 
         <com.android.settings.widget.HomepagePreference
             android:fragment="com.android.settings.communal.CommunalDashboardFragment"
@@ -123,7 +124,7 @@
 
         <com.android.settings.widget.HomepagePreference
             android:fragment="com.android.settings.compatible.SetCompatibleFragment"
-            android:icon="@drawable/ic_settings_compatible"
+            android:icon="@drawable/ic_settings_emergency_filled"
             android:key="top_level_battery"
             android:order="-5"
             android:title="@string/fde_compatible_set"
@@ -145,7 +146,7 @@
             settings:highlightableMenuKey="@string/menu_key_storage"
             settings:controller="com.android.settings.deviceinfo.TopLevelStoragePreferenceController"/>
 
-        <com.android.settings.widget.HomepagePreference
+        <!-- <com.android.settings.widget.HomepagePreference
             android:fragment="com.android.settings.fuelgauge.batteryusage.PowerUsageSummary"
             android:icon="@drawable/ic_settings_battery_filled"
             android:key="top_level_battery"
@@ -153,7 +154,7 @@
             android:title="@string/power_usage_summary_title"
             android:summary="@string/summary_placeholder"
             settings:highlightableMenuKey="@string/menu_key_battery"
-            settings:controller="com.android.settings.fuelgauge.TopLevelBatteryPreferenceController"/>
+            settings:controller="com.android.settings.fuelgauge.TopLevelBatteryPreferenceController"/> -->
 
         <com.android.settings.widget.HomepagePreference
             android:fragment="com.android.settings.system.SystemDashboardFragment"
@@ -215,21 +216,20 @@
             android:key="top_level_location"
             android:order="-20"
             android:title="@string/location_settings_title"
-            android:summary="@string/location_settings_loading_app_permission_stats"
             settings:highlightableMenuKey="@string/menu_key_location"/>    
 
-        <com.android.settings.widget.HomepagePreference
+        <!-- <com.android.settings.widget.HomepagePreference
             android:fragment="com.android.settings.accounts.AccountDashboardFragment"
             android:icon="@drawable/ic_settings_passwords_filled"
             android:key="top_level_accounts"
             android:order="-10"
             android:summary="@string/summary_placeholder"
             settings:highlightableMenuKey="@string/menu_key_accounts"
-            settings:controller="com.android.settings.accounts.TopLevelAccountEntryPreferenceController"/>
+            settings:controller="com.android.settings.accounts.TopLevelAccountEntryPreferenceController"/> -->
 
         <!-- TODO(b/460772532): Set highlightableMenuKey to menu_key_accounts once this screen
                 is ready to display user's accounts instead of AccountDashboardFragment. -->
-        <com.android.settings.widget.HomepagePreference
+        <!-- <com.android.settings.widget.HomepagePreference
             android:fragment="com.android.settings.backup.AccountsAndBackupDashboardFragment"
             android:icon="@drawable/ic_settings_accounts_and_backup_filled"
             android:key="top_level_accounts_and_backup"
@@ -237,7 +237,7 @@
             android:title="@string/accounts_and_backup_title"
             android:summary="@string/accounts_and_backup_summary"
             settings:highlightableMenuKey="@string/menu_key_accounts_and_backup"
-            settings:controller="com.android.settings.backup.TopLevelAccountsAndBackupEntryPreferenceController"/>
+            settings:controller="com.android.settings.backup.TopLevelAccountsAndBackupEntryPreferenceController"/> -->
 
         <com.android.settings.widget.HomepagePreference
             android:key="top_level_supervision"
@@ -248,7 +248,7 @@
             settings:highlightableMenuKey="@string/menu_key_supervision"
             settings:controller="com.android.settings.supervision.TopLevelSupervisionPreferenceController"/>
 
-        <com.android.settings.widget.HomepagePreference
+        <!-- <com.android.settings.widget.HomepagePreference
             android:key="top_level_emergency"
             android:title="@string/emergency_settings_preference_title"
             android:summary="@string/emergency_dashboard_summary"
@@ -256,7 +256,7 @@
             android:order="10"
             android:fragment="com.android.settings.emergency.EmergencyDashboardFragment"
             settings:isPreferenceVisible="@bool/config_show_emergency_settings"
-            settings:highlightableMenuKey="@string/menu_key_emergency"/>
+            settings:highlightableMenuKey="@string/menu_key_emergency"/> -->
     </PreferenceCategory>
 
     <PreferenceCategory

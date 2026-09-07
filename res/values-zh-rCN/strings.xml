@@ -6231,4 +6231,87 @@
     <string name="permit_access_hid" msgid="870824396872060949">"允许应用发现人体学接口设备 (HID)"</string>
     <string name="allow_access_hid_description" msgid="5950783046013896271">"如果您允许访问，恶意应用可能会重新编写人体学接口设备的程序，从而危及您的系统。例如，应用可以在未运行的情况下，模拟键盘或鼠标输入来控制您的系统。请先确保信任应用，再授予访问权限。"</string>
     <string name="keywords_access_hid" msgid="682455265293135353">"人机交互设备, HID, 访问权限, 设备"</string>
+
+
+     <!-- fde net text  -->
+    <string name="fde_wifi_name">"网络名称:"</string>
+    <string name="fde_wifi_password">"密码:"</string>
+    <string name="fde_wifi_encryption">"安全性:"</string>
+    <string name="fde_enter_wifi_name">"请输入网络名称"</string>
+    <string name="fde_enter_wifi_password">"请输入密码"</string>
+    <string name="fde_enter_wifi_name_and_password">"请输入网络名称和密码"</string>
+    <string name="fde_wifi">WIFI</string>
+    <string name="fde_ethernet">以太网</string>
+    <string name="fde_ethernet_and_wifi">以太网和WIFI</string>
+    <string name="fde_add_wifi">添加网络</string>
+    <string name="fde_manuals_add_wifi">手动添加网络</string>
+    <string name="fde_choose_nearby_wifi">请选择附近的WIFI</string>
+    <string name="fde_btn_cancel">取消</string>
+    <string name="fde_btn_confirm">确定</string>
+    <string name="fde_btn_operating_error">您操作太快</string>
+    <string name="fde_scanning">正在扫描...</string>
+    <string name="fde_connecting">正在连接</string>
+    <string name="fde_wifi_connect" >"连接"</string>
+    <string name="fde_wifi_disconnect" >"断开连接"</string>
+    <string name="fde_forget">忘记</string>
+    <string name="fde_del_network">删除网络</string>
+    <string name="fde_unconnect">断开连接</string>
+    <string name="fde_no_save">不保存</string>
+    <string name="fde_has_connected">已连接</string>
+    <string name="fde_has_disconnected">已断开</string>
+    <string name="fde_has_saved">已保存</string>
+    <string name="fde_no_wifi_module">无网卡，无法操作</string>
+    <string name="fde_net_mask" >"子网掩码"</string>
+    <string name="fde_net_input_mask" >"请输入子网掩码"</string>
+    <string name="fde_net_invalid_mask" >"无效的子网掩码"</string>
+    <string name="fde_net_disconnect_tips" >"是否断开该网络？"</string>
+    <string name="fde_net_connect_tips" >"是否连接该网络？"</string>
+    <string name="fde_net_connect_wifi" >"无线网络"</string>
+    <string name="fde_net_connect_wired" >"有线网络"</string>
+    <string name="open_wifi" >"开启Wi-Fi"</string>
+    <string name="fde_net_saved_network" >"已保存网络"</string>
+    <string name="fde_net_none" >"暂无数据"</string>
+    <string name="fde_net_other_networks" >"其它网络"</string>
+    <string name="fde_net_add_networks" >"添加网络"</string>
+    <string name="fde_net_networks" >"网络"</string>
+    <string name="fde_net_config" >"配置项"</string>
+
+    <string name="fde_compatible_set">兼容性设置</string>
+    <string name="fde_compatible_unset">关闭此项</string>
+    <string name="fde_compatible_summary">应用兼容性设置</string>
+    <string name="fde_input_hint">请输入值</string>
+    <string name="fde_input_appname_hint">请输入应用名称</string>
+    <string name="fde_app_name_title">应用名称</string>
+    <string name="fde_data_value">值</string>
+    <string name="fde_switch">请选择</string>
+    <string name="fde_tips">提示</string>
+    <string name="fde_clean_tips">是否清空所有配置?</string>
+    <string name="fde_reset_tips">是否恢复默认配置?</string>
+    <string name="fde_sync_config_from_gitee">是否从服务器同步最新配置?</string>
+    <string name="set_gps_info">设置GPS信息</string>
+    <string name="set_success">设置成功</string>
+    <string name="fde_country">国家</string>
+    <string name="fde_province">省份</string>
+    <string name="fde_city">城市</string>
+
+    <string name="configurable_interfaces">可配置接口</string>
+    <string name="ip_settings">IP 设置</string>
+    <string name="ip_address">IP 地址</string>
+    <string name="default_gateway">默认网关</string>
+    <string name="subnet_mask">子网掩码</string>
+    <string name="preferred_dns">首选DNS</string>
+    <string name="alternative_dns">备选DNS</string>
+    <string name="fde_version">OpenFDE 版本</string>
+    <string name="dock_size" msgid="570613010306330622">"程序坞大小"</string>
+    <string name="short_summary_dock_size" msgid="8444689613442419978">"放大或缩小程序坞"</string>
+    <string name="format_error">格式错误</string>
+    <string name="save_success">保存成功</string>
+
+    <string name="show_smallest">"更小"</string>
+    <string name="show_smaller">"较小"</string>
+    <string name="show_small">"小"</string>
+    <string name="show_center_small">"中小"</string>
+    <string name="show_recommend">"推荐"</string>
+    <string name="show_bigger">"较大"</string>
+    <string name="show_big">"更大"</string>
 </resources>

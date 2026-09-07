@@ -569,6 +569,7 @@
                     android:background="@drawable/btn_blue_background_selector"
                     android:text="@string/fde_btn_confirm"
                     android:textColor="#e6FFFFFF"
+                    android:gravity="center"
                     android:fontFamily="@font/alibaba_puhui_65_medium_65_medium"
                     android:textSize="14sp" />
 

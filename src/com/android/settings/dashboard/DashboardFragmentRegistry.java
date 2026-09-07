@@ -40,6 +40,7 @@ import com.android.settings.fuelgauge.batteryusage.PowerUsageSummary;
 import com.android.settings.gestures.GestureSettings;
 import com.android.settings.homepage.TopLevelSettings;
 import com.android.settings.network.NetworkDashboardFragment;
+import com.android.settings.network.fde.FdeNetworkDashboardFragment;
 import com.android.settings.notification.ConfigureNotificationSettings;
 import com.android.settings.notification.SoundSettings;
 import com.android.settings.privacy.PrivacyDashboardFragment;

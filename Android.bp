@@ -54,6 +54,7 @@ android_library {
 
     srcs: [
         "src/**/*.java",
+        "src/**/*.aidl",
         "src/**/*.kt",
     ],
     exclude_srcs: [
@@ -120,7 +121,6 @@ android_library {
         "settings_connectivity_flags_lib",
         "Spa-search",
         "SettingsInterfaceLib",
-
         // app function dependencies
         "androidx.appsearch_appsearch",
         "androidx.appsearch_appsearch-builtin-types",
@@ -128,7 +128,7 @@ android_library {
         "device-state-schema",
         "dynamiccolors",
         "com.android.text.flags-aconfig-java",
-	"androidx.room_room-runtime",
+	    "androidx.room_room-runtime",
     ],
 
     plugins: [
