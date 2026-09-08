@@ -120,7 +120,7 @@
 
         <com.android.settings.widget.HomepagePreference
             android:fragment="com.android.settings.compatible.SetCompatibleFragment"
-            android:icon="@drawable/ic_settings_emergency_filled"
+            android:icon="@drawable/ic_settings_compatible"
             android:key="top_level_battery"
             android:order="-5"
             android:title="@string/fde_compatible_set"
