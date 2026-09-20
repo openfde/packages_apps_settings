@@ -1240,6 +1240,8 @@
     <string name="skip_anyway_button_label">Skip anyway</string>
     <!-- Button for going to the previous screen or step [CHAR LIMIT=20] -->
     <string name="go_back_button_label">Go back</string>
+    <!-- Button for going to the next screen or step in the custom title bar [CHAR LIMIT=20] -->
+    <string name="forward_button_label">Forward</string>
     <!-- Button text to skip lock screen setup [CHAR LIMIT=20] -->
     <string name="skip_lock_screen_dialog_button_label">Skip</string>
     <!-- Button text to cancel lock screen skip dialog [CHAR LIMIT=20] -->

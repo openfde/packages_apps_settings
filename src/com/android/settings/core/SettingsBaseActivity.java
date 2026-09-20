@@ -210,6 +210,13 @@ public class SettingsBaseActivity extends FragmentActivity implements CategoryHa
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        // Keep the custom title bar's back / forward buttons in sync with the visited pages.
+        SettingsNavigationHistory.get().record(getIntent());
+    }
+
+    @Override
     public void setContentView(@LayoutRes int layoutResID) {
         final ViewGroup parent = findViewById(R.id.content_frame);
         if (parent != null) {

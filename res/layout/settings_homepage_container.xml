@@ -58,18 +58,51 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
+    <!-- 自定义标题栏：与窗口顶部（系统 caption bar 区域）对齐，整体一分为二。
+         左半部分背景与 SettingsBaseActivity 一致，右半部分背景与 SubSettings 一致，
+         并在右半部分放置返回 / 前进按钮。 -->
     <LinearLayout
         android:id="@+id/caption_bar"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="#ff0"
+        android:layout_height="@dimen/caption_bar_height"
+        android:layout_gravity="top"
+
         android:gravity="center_vertical"
-        android:orientation="horizontal"/>
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:id="@+id/caption_bar_right"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:gravity="center_vertical|end"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/caption_bar_back"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/go_back_button_label"
+                android:src="@drawable/ic_arrow_back"/>
+
+            <ImageButton
+                android:id="@+id/caption_bar_forward"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/forward_button_label"
+                android:src="@drawable/ic_arrow_forward"/>
+        </LinearLayout>
+    </LinearLayout>
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/caption_bar_height"
         app:elevation="0dp"
         android:touchscreenBlocksFocus="false"
         android:keyboardNavigationCluster="false">

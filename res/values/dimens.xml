@@ -614,4 +614,7 @@
     <dimen name="fde_max_text">20sp</dimen>
     <dimen name="fde_large_text">18sp</dimen>
     <dimen name="fde_light_text">14sp</dimen>
+
+    <!-- Height of the custom window title bar (caption bar) on the homepage. -->
+    <dimen name="caption_bar_height">48dp</dimen>
 </resources>

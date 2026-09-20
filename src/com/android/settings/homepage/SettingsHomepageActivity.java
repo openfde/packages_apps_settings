@@ -46,6 +46,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 
 import androidx.annotation.VisibleForTesting;
 import androidx.core.graphics.Insets;
@@ -72,6 +73,7 @@ import com.android.settings.activityembedding.ActivityEmbeddingUtils;
 import com.android.settings.activityembedding.EmbeddedDeepLinkUtils;
 import com.android.settings.core.CategoryMixin;
 import com.android.settings.core.FeatureFlags;
+import com.android.settings.core.SettingsNavigationHistory;
 import com.android.settings.flags.Flags;
 import com.android.settings.homepage.contextualcards.ContextualCardsFragment;
 import com.android.settings.overlay.FeatureFactory;
@@ -90,6 +92,7 @@ import java.util.Set;
 
 import android.view.ViewTreeObserver;
 import android.view.WindowInsetsController;
+import android.graphics.Color;
 import android.graphics.Rect;
 import androidx.core.view.OnApplyWindowInsetsListener;
 
@@ -132,6 +135,9 @@ public class SettingsHomepageActivity extends FragmentActivity implements
 
     private View root ;
     private  View  captionBar;
+    private ImageButton mCaptionBackButton;
+    private ImageButton mCaptionForwardButton;
+    private SettingsNavigationHistory.Listener mHistoryListener;
 
     /** A listener receiving homepage loaded events. */
     public interface HomepageLoadedListener {
@@ -272,6 +278,7 @@ public class SettingsHomepageActivity extends FragmentActivity implements
 
         root = findViewById(R.id.settings_homepage_container);
         captionBar = findViewById(R.id.caption_bar);
+        setupCaptionBarNavigation();
 
         initHomepageContainer();
         updateHomepageBackground();
@@ -325,14 +332,73 @@ public class SettingsHomepageActivity extends FragmentActivity implements
     }
 
 
+    private void setupCaptionBarNavigation() {
+        if (captionBar == null) {
+            return;
+        }
+        mCaptionBackButton = captionBar.findViewById(R.id.caption_bar_back);
+        mCaptionForwardButton = captionBar.findViewById(R.id.caption_bar_forward);
+        if (mCaptionBackButton != null) {
+            mCaptionBackButton.setOnClickListener(v ->
+                    SettingsNavigationHistory.get().goBack(SettingsHomepageActivity.this));
+        }
+        if (mCaptionForwardButton != null) {
+            mCaptionForwardButton.setOnClickListener(v ->
+                    SettingsNavigationHistory.get().goForward(SettingsHomepageActivity.this));
+        }
+        mHistoryListener = (canGoBack, canGoForward) -> updateCaptionBarButtons();
+        SettingsNavigationHistory.get().setListener(mHistoryListener);
+        updateCaptionBarButtons();
+    }
+
+    private void updateCaptionBarButtons() {
+        final SettingsNavigationHistory history = SettingsNavigationHistory.get();
+        if (mCaptionBackButton != null) {
+            final boolean canGoBack = history.canGoBack();
+            mCaptionBackButton.setEnabled(canGoBack);
+            mCaptionBackButton.setAlpha(canGoBack ? 1f : 0.4f);
+        }
+        if (mCaptionForwardButton != null) {
+            final boolean canGoForward = history.canGoForward();
+            mCaptionForwardButton.setEnabled(canGoForward);
+            mCaptionForwardButton.setAlpha(canGoForward ? 1f : 0.4f);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SettingsNavigationHistory.get().record(getIntent());
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        // The theme may re-apply its own system bar appearance while the window is being shown,
+        // so re-assert the transparent caption after the activity is resumed.
+        setupTransparentCaptionBar();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SettingsNavigationHistory.get().clearListener(mHistoryListener);
+        mHistoryListener = null;
+    }
+
     private void setupTransparentCaptionBar() {
-        WindowInsetsController controller = getWindow().getInsetsController();
+        final Window window = getWindow();
+        WindowInsetsController controller = window.getInsetsController();
         if (controller != null) {
             controller.setSystemBarsAppearance(
                     WindowInsetsController.APPEARANCE_TRANSPARENT_CAPTION_BAR_BACKGROUND,
                     WindowInsetsController.APPEARANCE_TRANSPARENT_CAPTION_BAR_BACKGROUND
             );
         }
+        // 主题（浅色 Theme.Settings.Home）会把 statusBarColor 设成不透明色。透明标题栏标志
+        // 一旦没被系统采纳，窗口装饰就会退回用 statusBarColor 去画标题栏背景，从而盖住
+        // caption_bar。这里显式置为透明，保证两种主题下标题栏区域都是透的。
+        window.setStatusBarColor(Color.TRANSPARENT);
     }
 
     private void setupCaptionBarInsets() {
