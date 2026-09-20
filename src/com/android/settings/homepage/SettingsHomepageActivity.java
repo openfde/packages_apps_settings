@@ -83,8 +83,15 @@ import com.android.settingslib.widget.SettingsThemeHelper;
 import com.google.android.setupcompat.util.WizardManagerHelper;
 
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+
+import android.view.ViewTreeObserver;
+import android.view.WindowInsetsController;
+import android.graphics.Rect;
+import androidx.core.view.OnApplyWindowInsetsListener;
 
 /** Settings homepage activity */
 public class SettingsHomepageActivity extends FragmentActivity implements
@@ -121,6 +128,10 @@ public class SettingsHomepageActivity extends FragmentActivity implements
     private SplitControllerCallbackAdapter mSplitControllerAdapter;
     private SplitInfoCallback mCallback;
     private boolean mAllowUpdateSuggestion = true;
+
+
+    private View root ;
+    private  View  captionBar;
 
     /** A listener receiving homepage loaded events. */
     public interface HomepageLoadedListener {
@@ -191,6 +202,7 @@ public class SettingsHomepageActivity extends FragmentActivity implements
             setTheme(R.style.Theme_Settings_Home_Expressive);
         }
 
+
         // Ensure device is provisioned in order to access Settings home
         // TODO(b/331254029): This should later be replaced in favor of an allowlist
         boolean unprovisioned = android.provider.Settings.Global.getInt(getContentResolver(),
@@ -257,6 +269,10 @@ public class SettingsHomepageActivity extends FragmentActivity implements
 
         mIsTwoPane = ActivityEmbeddingUtils.isAlreadyEmbedded(this);
 
+
+        root = findViewById(R.id.settings_homepage_container);
+        captionBar = findViewById(R.id.caption_bar);
+
         initHomepageContainer();
         updateHomepageBackground();
         mLoadedListeners = new ArraySet<>();
@@ -302,7 +318,82 @@ public class SettingsHomepageActivity extends FragmentActivity implements
         updateSplitLayout();
 
         enableTaskLocaleOverride();
+
+        setupTransparentCaptionBar();
+        setupCaptionBarInsets();
+        setupGestureExclusion();
     }
+
+
+    private void setupTransparentCaptionBar() {
+        WindowInsetsController controller = getWindow().getInsetsController();
+        if (controller != null) {
+            controller.setSystemBarsAppearance(
+                    WindowInsetsController.APPEARANCE_TRANSPARENT_CAPTION_BAR_BACKGROUND,
+                    WindowInsetsController.APPEARANCE_TRANSPARENT_CAPTION_BAR_BACKGROUND
+            );
+        }
+    }
+
+    private void setupCaptionBarInsets() {
+       try {
+           if(root !=null){
+               ViewCompat.setOnApplyWindowInsetsListener(
+                       root,
+                       new OnApplyWindowInsetsListener() {
+                           @Override
+                           public WindowInsetsCompat onApplyWindowInsets(
+                                   View view,
+                                   WindowInsetsCompat windowInsets) {
+                            //    Insets captionInsets =
+                            //            windowInsets.getInsets(
+                            //                    WindowInsetsCompat.Type.captionBar()
+                            //            );
+                               // 自定义标题栏不需要额外 padding
+                               if(captionBar!= null){
+                                   captionBar.setPadding(0, 0, 0, 0);
+                               }
+                               return windowInsets;
+                           }
+                       }
+               );
+               ViewCompat.requestApplyInsets(root);
+           }
+       }catch (Exception e) {
+           e.printStackTrace();
+        }
+
+    }
+
+    private void setupGestureExclusion() {
+        final View decorView = getWindow().getDecorView();
+        Runnable updateGestureExclusion = new Runnable() {
+            @Override
+            public void run() {
+                if (decorView.getWidth() <= 0) {
+                    return;
+                }
+                int height = (int) (48 * getResources().getDisplayMetrics().density);
+                List<Rect> rects = new ArrayList<>();
+                rects.add(new Rect( decorView.getWidth()/2, 0,decorView.getWidth(),  height ));
+                decorView.setSystemGestureExclusionRects(rects);
+            }
+        };
+
+        // 第一次更新
+        updateGestureExclusion.run();
+
+        // Layout 改变时更新
+        decorView.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        updateGestureExclusion.run();
+                    }
+                }
+        );
+    }
+
 
     @VisibleForTesting
     void initSplitPairRules() {
@@ -377,7 +468,7 @@ public class SettingsHomepageActivity extends FragmentActivity implements
                     mIsRegularLayout
                             ? R.dimen.search_bar_title_padding_start_regular_two_pane
                             : R.dimen.search_bar_title_padding_start);
-            searchTitle.setPaddingRelative(paddingStart, 0, 0, 0);
+            // searchTitle.setPaddingRelative(paddingStart, 0, 0, 0);
         }
         // Notify fragments
         getSupportFragmentManager().getFragments().forEach(fragment -> {
@@ -394,15 +485,15 @@ public class SettingsHomepageActivity extends FragmentActivity implements
                     Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars()
                             | WindowInsetsCompat.Type.displayCutout());
                     // Apply the insets paddings to the view.
-                    v.setPadding(insets.left, 0, insets.right, insets.bottom);
+                    // v.setPadding(insets.left, 0, insets.right, insets.bottom);
 
                     // reset the top padding of search bar container to original top padding
                     // plus insets top.
                     View container = findViewById(R.id.app_bar_container);
                     final int top_padding = getResources().getDimensionPixelSize(
                             R.dimen.search_bar_container_top_padding);
-                    container.setPadding(container.getPaddingLeft(), top_padding + insets.top,
-                            container.getPaddingRight(), container.getPaddingBottom());
+                    // container.setPadding(container.getPaddingLeft(), top_padding + insets.top,
+                    //         container.getPaddingRight(), container.getPaddingBottom());
 
                     // Return CONSUMED if you don't want the window insets to keep being
                     // passed down to descendant views.

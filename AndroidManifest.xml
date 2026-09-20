@@ -163,7 +163,7 @@
             android:hardwareAccelerated="true"
             android:requiredForAllUsers="true"
             android:supportsRtl="true"
- 	    android:debuggable="true"
+ 	        android:debuggable="true"
             android:backupAgent="com.android.settings.backup.SettingsBackupHelper"
             android:restoreAnyVersion="true"
             android:usesCleartextTraffic="true"

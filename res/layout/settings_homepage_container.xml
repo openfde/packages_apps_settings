@@ -58,6 +58,14 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
+    <LinearLayout
+        android:id="@+id/caption_bar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#ff0"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"/>
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
