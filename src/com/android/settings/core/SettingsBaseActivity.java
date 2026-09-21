@@ -30,11 +30,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowInsetsController;
 import android.widget.Toolbar;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.android.settings.R;
@@ -55,6 +59,12 @@ import com.google.android.material.floatingtoolbar.FloatingToolbarLayout;
 import com.google.android.material.resources.TextAppearanceConfig;
 import com.google.android.setupcompat.util.WizardManagerHelper;
 import com.google.android.setupdesign.util.ThemeHelper;
+
+import android.view.ViewTreeObserver;
+import android.view.WindowInsetsController;
+import android.graphics.Color;
+import android.graphics.Rect;
+import androidx.core.view.OnApplyWindowInsetsListener;
 
 import java.util.List;
 
@@ -84,6 +94,10 @@ public class SettingsBaseActivity extends FragmentActivity implements CategoryHa
     protected AppBarLayout mAppBarLayout;
 
     private CollapsingToolbarDelegate mToolbarDelegate;
+
+
+    private View root ;
+    private  View  captionBar;
 
     @Override
     public CategoryMixin getCategoryMixin() {
@@ -118,6 +132,7 @@ public class SettingsBaseActivity extends FragmentActivity implements CategoryHa
         final long startTime = System.currentTimeMillis();
         if (!isAnySetupWizard) {
             Utils.setupEdgeToEdge(this);
+            setupActionBarInTitleBar();
             hideInternalActionBar();
         }
         getLifecycle().addObserver(new HideNonSystemOverlayMixin(this));
@@ -174,6 +189,100 @@ public class SettingsBaseActivity extends FragmentActivity implements CategoryHa
         if (DEBUG_TIMING) {
             Log.d(TAG, "onCreate took " + (System.currentTimeMillis() - startTime) + " ms");
         }
+    }
+
+
+    //  private void setupTransparentCaptionBar() {
+    //     final Window window = getWindow();
+    //     WindowInsetsController controller = window.getInsetsController();
+    //     if (controller != null) {
+    //         controller.setSystemBarsAppearance(
+    //                 WindowInsetsController.APPEARANCE_TRANSPARENT_CAPTION_BAR_BACKGROUND,
+    //                 WindowInsetsController.APPEARANCE_TRANSPARENT_CAPTION_BAR_BACKGROUND
+    //         );
+    //     }
+    //     window.setStatusBarColor(Color.TRANSPARENT);
+    // }
+
+    // private void setupCaptionBarInsets() {
+    //    try {
+    //        if(root !=null){
+    //            ViewCompat.setOnApplyWindowInsetsListener(
+    //                    root,
+    //                    new OnApplyWindowInsetsListener() {
+    //                        @Override
+    //                        public WindowInsetsCompat onApplyWindowInsets(
+    //                                View view,
+    //                                WindowInsetsCompat windowInsets) {
+    //                         //    Insets captionInsets =
+    //                         //            windowInsets.getInsets(
+    //                         //                    WindowInsetsCompat.Type.captionBar()
+    //                         //            );
+    //                            // 自定义标题栏不需要额外 padding
+    //                            if(captionBar!= null){
+    //                                captionBar.setPadding(0, 0, 0, 0);
+    //                            }
+    //                            return windowInsets;
+    //                        }
+    //                    }
+    //            );
+    //            ViewCompat.requestApplyInsets(root);
+    //        }
+    //    }catch (Exception e) {
+    //        e.printStackTrace();
+    //     }
+
+    // }
+
+    // private void setupGestureExclusion() {
+    //     final View decorView = getWindow().getDecorView();
+    //     Runnable updateGestureExclusion = new Runnable() {
+    //         @Override
+    //         public void run() {
+    //             if (decorView.getWidth() <= 0) {
+    //                 return;
+    //             }
+    //             int height = (int) (48 * getResources().getDisplayMetrics().density);
+    //             List<Rect> rects = new ArrayList<>();
+    //             rects.add(new Rect( decorView.getWidth()/2, 0,decorView.getWidth(),  height ));
+    //             decorView.setSystemGestureExclusionRects(rects);
+    //         }
+    //     };
+    // }
+
+    /**
+     * Draws the action bar inside the window caption bar (the system title bar of a freeform /
+     * desktop window), so the toolbar's up/back button visually sits in the title bar instead of
+     * below it.
+     *
+     * <p>{@link Utils#setupEdgeToEdge} pads the content by status bar + caption bar height, which
+     * pushes the action bar below the title bar. When the window really has a caption bar we drop
+     * that top padding and request a transparent caption background, so the app's own action bar
+     * becomes the visible title bar content. On fullscreen handheld windows the caption bar inset
+     * is 0 and the previous behaviour is kept.
+     */
+    private void setupActionBarInTitleBar() {
+        final WindowInsetsController controller = getWindow().getInsetsController();
+        if (controller != null) {
+            controller.setSystemBarsAppearance(
+                    WindowInsetsController.APPEARANCE_TRANSPARENT_CAPTION_BAR_BACKGROUND,
+                    WindowInsetsController.APPEARANCE_TRANSPARENT_CAPTION_BAR_BACKGROUND);
+        }
+        final View content = findViewById(android.R.id.content);
+        if (content == null) {
+            return;
+        }
+        ViewCompat.setOnApplyWindowInsetsListener(content, (v, windowInsets) -> {
+            final Insets bars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars()
+                    | WindowInsetsCompat.Type.displayCutout());
+            final Insets caption =
+                    windowInsets.getInsets(WindowInsetsCompat.Type.captionBar());
+            // With a caption bar present keep the action bar at the very top so it shows up in
+            // the title bar; otherwise keep the regular status bar padding.
+            final int top = caption.top > 0 ? 0 : bars.top;
+            v.setPadding(bars.left, top, bars.right, bars.bottom);
+            return WindowInsetsCompat.CONSUMED;
+        });
     }
 
     @Override

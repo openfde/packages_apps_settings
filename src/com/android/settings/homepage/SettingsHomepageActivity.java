@@ -326,9 +326,9 @@ public class SettingsHomepageActivity extends FragmentActivity implements
 
         enableTaskLocaleOverride();
 
-        setupTransparentCaptionBar();
-        setupCaptionBarInsets();
-        setupGestureExclusion();
+        // setupTransparentCaptionBar();
+        // setupCaptionBarInsets();
+        // setupGestureExclusion();
     }
 
 
