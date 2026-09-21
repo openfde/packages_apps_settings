@@ -42,6 +42,7 @@ import com.android.settingslib.search.SearchIndexableResources;
 import com.google.android.setupcompat.util.WizardManagerHelper;
 
 import java.util.List;
+import android.view.MotionEvent;
 
 /**
  * FeatureProvider for Settings Search
@@ -131,7 +132,13 @@ public interface SearchFeatureProvider {
                 true /* finishSecondaryWithPrimary */,
                 false /* clearTop */);
 
-        toolbar.setOnClickListener(tb -> startSearchActivity(context, activity, pageId, intent));
+        // toolbar.setOnClickListener(tb -> startSearchActivity(context, activity, pageId, intent));
+        toolbar.setOnTouchListener((v, event) -> {
+                if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+                        startSearchActivity(context, activity, pageId, intent);
+                }
+                return true;
+        });
 
         toolbar.setHandwritingDelegatorCallback(
                 () -> startSearchActivity(context, activity, pageId, intent));

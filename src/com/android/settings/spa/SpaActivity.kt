@@ -29,6 +29,15 @@ import com.android.settingslib.spa.framework.util.SESSION_BROWSE
 import com.android.settingslib.spa.framework.util.appendSpaParams
 import com.google.android.setupcompat.util.WizardManagerHelper
 
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import android.view.WindowInsetsController;
+import android.graphics.Color;
+import android.graphics.Rect;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import android.view.View;
+
 class SpaActivity : BrowseActivity() {
     override fun isPageEnabled(page: SettingsPage) =
         super.isPageEnabled(page) && !isSuwAndPageBlocked(page.sppName)
@@ -36,6 +45,7 @@ class SpaActivity : BrowseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lifecycle.addObserver(HideNonSystemOverlayMixin(this))
+        setupActionBarInTitleBar()
     }
 
     companion object {
@@ -65,4 +75,41 @@ class SpaActivity : BrowseActivity() {
                     sessionName = SESSION_BROWSE,
                 )
     }
+
+
+    private fun setupActionBarInTitleBar() {
+    val controller = window.insetsController
+    if (controller != null) {
+        controller.setSystemBarsAppearance(
+            WindowInsetsController.APPEARANCE_TRANSPARENT_CAPTION_BAR_BACKGROUND,
+            WindowInsetsController.APPEARANCE_TRANSPARENT_CAPTION_BAR_BACKGROUND
+        )
+    }
+
+    val content = findViewById<View>(android.R.id.content) ?: return
+
+    ViewCompat.setOnApplyWindowInsetsListener(content) { v, windowInsets ->
+        val bars = windowInsets.getInsets(
+            WindowInsetsCompat.Type.systemBars() or
+                    WindowInsetsCompat.Type.displayCutout()
+        )
+
+        val caption = windowInsets.getInsets(
+            WindowInsetsCompat.Type.captionBar()
+        )
+
+        // With a caption bar present keep the action bar at the very top
+        // so it shows up in the title bar; otherwise keep the regular status bar padding.
+        val top = if (caption.top > 0) 0 else bars.top
+
+        v.setPadding(
+            bars.left,
+            top,
+            bars.right,
+            bars.bottom
+        )
+
+        WindowInsetsCompat.CONSUMED
+    }
+}
 }
