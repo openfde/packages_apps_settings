@@ -135,8 +135,7 @@ public class SettingsHomepageActivity extends FragmentActivity implements
 
     private View root ;
     private  View  captionBar;
-    private ImageButton mCaptionBackButton;
-    private ImageButton mCaptionForwardButton;
+ 
     private SettingsNavigationHistory.Listener mHistoryListener;
 
     /** A listener receiving homepage loaded events. */
@@ -336,16 +335,8 @@ public class SettingsHomepageActivity extends FragmentActivity implements
         if (captionBar == null) {
             return;
         }
-        mCaptionBackButton = captionBar.findViewById(R.id.caption_bar_back);
-        mCaptionForwardButton = captionBar.findViewById(R.id.caption_bar_forward);
-        if (mCaptionBackButton != null) {
-            mCaptionBackButton.setOnClickListener(v ->
-                    SettingsNavigationHistory.get().goBack(SettingsHomepageActivity.this));
-        }
-        if (mCaptionForwardButton != null) {
-            mCaptionForwardButton.setOnClickListener(v ->
-                    SettingsNavigationHistory.get().goForward(SettingsHomepageActivity.this));
-        }
+       
+      
         mHistoryListener = (canGoBack, canGoForward) -> updateCaptionBarButtons();
         SettingsNavigationHistory.get().setListener(mHistoryListener);
         updateCaptionBarButtons();
@@ -353,16 +344,7 @@ public class SettingsHomepageActivity extends FragmentActivity implements
 
     private void updateCaptionBarButtons() {
         final SettingsNavigationHistory history = SettingsNavigationHistory.get();
-        if (mCaptionBackButton != null) {
-            final boolean canGoBack = history.canGoBack();
-            mCaptionBackButton.setEnabled(canGoBack);
-            mCaptionBackButton.setAlpha(canGoBack ? 1f : 0.4f);
-        }
-        if (mCaptionForwardButton != null) {
-            final boolean canGoForward = history.canGoForward();
-            mCaptionForwardButton.setEnabled(canGoForward);
-            mCaptionForwardButton.setAlpha(canGoForward ? 1f : 0.4f);
-        }
+     
     }
 
     @Override

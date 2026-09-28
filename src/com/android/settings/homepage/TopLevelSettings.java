@@ -245,6 +245,11 @@ public class TopLevelSettings extends DashboardFragment implements SplitLayoutLi
                 savedInstanceState);
         recyclerView.setVerticalScrollBarEnabled(false);
         recyclerView.setHorizontalScrollBarEnabled(false);
+        // Clip the list to its own bounds. Theme.Settings sets android:clipChildren=false, so
+        // without this the list would keep drawing above the scroll container and show up in the
+        // (transparent) window title bar when it is scrolled.
+        recyclerView.setClipChildren(true);
+        recyclerView.setClipToPadding(true);
 
         recyclerView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
