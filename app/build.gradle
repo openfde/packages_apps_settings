@@ -1,0 +1,105 @@
+import java.nio.file.Files
+
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING
+
+plugins {
+    id 'base'
+}
+
+def localProperties = new Properties()
+def localPropsFile = rootProject.file('local.properties')
+if (localPropsFile.exists()) {
+    localPropsFile.withInputStream { localProperties.load(it) }
+}
+
+def cfg = { String key, String env, String dflt ->
+    if (project.hasProperty(key)) return project.property(key)
+    if (localProperties.containsKey(key)) return localProperties.getProperty(key)
+    def envVal = System.getenv(env)
+    envVal ?: dflt
+}
+
+def aospRoot = cfg('aosp.root', 'AOSP_ROOT', '/aosp1/xdq_ice')
+def settingsJar = cfg('settings.jar', 'SETTINGS_JAR',
+        "$aospRoot/out/soong/.intermediates/packages/apps/Settings/Settings/android_common/withres/Settings.jar")
+def packageResApk = cfg('settings.resApk', 'SETTINGS_RES_APK',
+        "$aospRoot/out/soong/.intermediates/packages/apps/Settings/Settings/android_common/package-res.apk")
+def frameworkJar = cfg('framework.jar', 'FRAMEWORK_JAR',
+        "$aospRoot/out/soong/.intermediates/frameworks/base/framework/android_common/combined/framework.jar")
+def buildTools = cfg('sdk.buildTools', 'SDK_BUILD_TOOLS',
+        '/home/xudingqiang/android_sdk/build-tools/36.1.0')
+def debugKeystore = cfg('sdk.debugKeystore', 'DEBUG_KEYSTORE',
+        "${System.getProperty('user.home')}/.android/debug.keystore")
+def minApi = cfg('apk.minSdkVersion', 'MIN_SDK_VERSION', '30')
+
+def d8 = new File(buildTools, 'd8')
+def zipalign = new File(buildTools, 'zipalign')
+def apksigner = new File(buildTools, 'apksigner')
+
+def dexOutput = layout.buildDirectory.dir('dex')
+def apkFile = layout.buildDirectory.file('outputs/apk/debug/Settings-debug.apk')
+def unsignedApk = layout.buildDirectory.file('intermediates/unsigned.apk')
+def alignedApk = layout.buildDirectory.file('intermediates/aligned.apk')
+
+tasks.register('dexClasses', Exec) {
+    group = 'build'
+    description = "Dexes the Soong-built Settings classes jar ($settingsJar) into classes*.dex"
+    def outDir = dexOutput.get().asFile
+    inputs.file(settingsJar).withPathSensitivity(PathSensitivity.ABSOLUTE)
+    outputs.dir(outDir)
+    doFirst {
+        delete outDir
+        mkdir outDir
+    }
+    commandLine d8.absolutePath, '-JXmx4G', '--min-api', minApi,
+            '--lib', frameworkJar,
+            '--output', outDir.absolutePath,
+            settingsJar
+}
+
+tasks.register('assembleDebug') {
+    group = 'build'
+    description = 'Assembles Settings-debug.apk from Soong prebuilt resources and dexed classes.'
+    dependsOn 'dexClasses'
+    inputs.file(packageResApk).withPathSensitivity(PathSensitivity.ABSOLUTE)
+    outputs.file(apkFile)
+    doLast {
+        def out = apkFile.get().asFile
+        def unsigned = unsignedApk.get().asFile
+        def aligned = alignedApk.get().asFile
+        def dexDir = dexOutput.get().asFile
+        delete out, unsigned, aligned
+        mkdir out.parentFile
+        mkdir unsigned.parentFile
+        Files.copy(new File(packageResApk).toPath(), unsigned.toPath(), REPLACE_EXISTING)
+        exec {
+            workingDir dexDir
+            commandLine 'zip', '-q', '-r', unsigned.absolutePath, '.', '-i', 'classes*.dex'
+        }
+        exec {
+            commandLine zipalign.absolutePath, '-f', '4', unsigned.absolutePath, aligned.absolutePath
+        }
+        exec {
+            commandLine apksigner.absolutePath, 'sign',
+                    '--ks', debugKeystore,
+                    '--ks-pass', 'pass:android',
+                    '--ks-key-alias', 'androiddebugkey',
+                    '--key-pass', 'pass:android',
+                    '--v4-signing-enabled', 'false',
+                    '--out', out.absolutePath,
+                    aligned.absolutePath
+        }
+    }
+}
+
+tasks.register('installDebug', Exec) {
+    group = 'build'
+    description = 'Installs Settings-debug.apk to a connected device/emulator via adb.'
+    dependsOn 'assembleDebug'
+    def adbDir = new File(System.getenv('ANDROID_HOME') ?: '/home/xudingqiang/android_sdk', 'platform-tools')
+    commandLine new File(adbDir, 'adb').absolutePath, 'install', '-r', apkFile.get().asFile.absolutePath
+}
+
+tasks.named('build') {
+    dependsOn 'assembleDebug'
+}
