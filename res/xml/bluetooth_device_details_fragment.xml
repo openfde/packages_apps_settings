@@ -32,7 +32,7 @@
         android:selectable="false"
         settings:allowDividerBelow="true"
         settings:searchable="false"/>
-
+<!--
     <com.android.settingslib.widget.LayoutPreference
         android:key="advanced_bluetooth_device_header"
         android:layout="@layout/advanced_bt_entity_header"
@@ -55,11 +55,11 @@
     <com.android.settings.applications.SpacePreference
         android:key="hearing_aid_space_layout"
         android:layout_height="8dp"/>
-
+-->
     <com.android.settingslib.widget.ActionButtonsPreference
         android:key="action_buttons"
         settings:allowDividerBelow="true"/>
-
+<!--
     <com.android.settingslib.widget.ChainedPreferenceGroup
         android:key="device_stylus"/>
 
@@ -115,7 +115,7 @@
 
     <com.android.settingslib.widget.ChainedPreferenceGroup
         android:key="game_controller_settings"/>
-
+-->
     <com.android.settingslib.widget.FooterPreference
         android:key="device_details_footer"
         settings:searchable="false"

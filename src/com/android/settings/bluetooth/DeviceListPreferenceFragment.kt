@@ -219,7 +219,7 @@ abstract class DeviceListPreferenceFragment(restrictedKey: String?) :
             return
         }
         if (cachedDevice.device.bondState == BluetoothDevice.BOND_BONDED
-            && BluetoothUtils.isExclusivelyManagedBluetoothDevice(
+            || BluetoothUtils.isExclusivelyManagedBluetoothDevice(
                 prefContext, cachedDevice.device)) {
             Log.d(TAG, "Trying to create preference for a exclusively managed device")
             return

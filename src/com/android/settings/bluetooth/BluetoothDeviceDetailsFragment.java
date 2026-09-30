@@ -181,7 +181,7 @@ public class BluetoothDeviceDetailsFragment extends BluetoothDetailsConfigurable
         }
         Integer keyMissingCount = BluetoothUtils.getKeyMissingCount(cachedDevice.getDevice());
         mIsKeyMissingDevice = keyMissingCount != null && keyMissingCount > 0;
-
+/*
         getController(
                 AdvancedBluetoothDetailsHeaderController.class,
                 controller -> controller.init(cachedDevice, this));
@@ -201,7 +201,7 @@ public class BluetoothDeviceDetailsFragment extends BluetoothDetailsConfigurable
                         controller.setSliceUri(
                                 featureProvider.getBluetoothDeviceSettingsUri(
                                         cachedDevice.getDevice())));
-
+*/
         localBluetoothManager.getEventManager().registerCallback(mBluetoothCallback);
 
         mLastConnectionFailureTimeMillis = cachedDevice.getConnectionFailureTimeMillis();
@@ -288,8 +288,8 @@ public class BluetoothDeviceDetailsFragment extends BluetoothDetailsConfigurable
         ImmutableList.Builder<String> visibleKeys = new ImmutableList.Builder<>();
         visibleKeys
                 .add(use(BluetoothDetailsBannerController.class).getPreferenceKey())
-                .add(use(AdvancedBluetoothDetailsHeaderController.class).getPreferenceKey())
-                .add(use(LeAudioBluetoothDetailsHeaderController.class).getPreferenceKey())
+                /*.add(use(AdvancedBluetoothDetailsHeaderController.class).getPreferenceKey())
+                .add(use(LeAudioBluetoothDetailsHeaderController.class).getPreferenceKey())*/
                 .add(use(GeneralBluetoothDetailsHeaderController.class).getPreferenceKey())
                 .add(use(BluetoothDetailsButtonsController.class).getPreferenceKey());
         if (!BluetoothUtils.isHeadset(cachedDevice.getDevice())) {
@@ -302,8 +302,8 @@ public class BluetoothDeviceDetailsFragment extends BluetoothDetailsConfigurable
         ImmutableList.Builder<String> visibleKeys = new ImmutableList.Builder<>();
         visibleKeys
                 .add(use(BluetoothDetailsBannerController.class).getPreferenceKey())
-                .add(use(AdvancedBluetoothDetailsHeaderController.class).getPreferenceKey())
-                .add(use(LeAudioBluetoothDetailsHeaderController.class).getPreferenceKey())
+                /*.add(use(AdvancedBluetoothDetailsHeaderController.class).getPreferenceKey())
+                .add(use(LeAudioBluetoothDetailsHeaderController.class).getPreferenceKey())*/
                 .add(use(BluetoothDetailsButtonsController.class).getPreferenceKey())
                 .add(LOADING_PREF);
         return visibleKeys.build();
@@ -322,6 +322,9 @@ public class BluetoothDeviceDetailsFragment extends BluetoothDetailsConfigurable
                             context, this, cachedDevice, lifecycle));
             controllers.add(new BluetoothDetailsButtonsController(context, this, cachedDevice,
                     lifecycle));
+            controllers.add(new BluetoothDetailsMacAddressController(context, this, cachedDevice,
+                    lifecycle));
+            /*
             controllers.add(
                     new BluetoothDetailsAudioSharingController(
                             context, this, localBluetoothManager, cachedDevice, lifecycle));
@@ -335,8 +338,6 @@ public class BluetoothDeviceDetailsFragment extends BluetoothDetailsConfigurable
             controllers.add(new BluetoothDetailsProfilesController(context, this,
                     localBluetoothManager,
                     cachedDevice, lifecycle));
-            controllers.add(new BluetoothDetailsMacAddressController(context, this, cachedDevice,
-                    lifecycle));
             controllers.add(new StylusDevicesController(context, mInputDevice, cachedDevice,
                     lifecycle));
             controllers.add(new BluetoothDetailsRelatedToolsController(context, this, cachedDevice,
@@ -357,6 +358,7 @@ public class BluetoothDeviceDetailsFragment extends BluetoothDetailsConfigurable
             controllers.add(hearingDeviceController);
             hearingDeviceController.initSubControllers(isLaunchFromHearingDevicePage());
             controllers.addAll(hearingDeviceController.getSubControllers());
+            */
         }
         return controllers;
     }
