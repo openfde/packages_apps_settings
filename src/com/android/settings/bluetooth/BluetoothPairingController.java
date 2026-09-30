@@ -221,6 +221,9 @@ public class BluetoothPairingController implements OnCheckedChangeListener,
      * @return A boolean whether the device allows to show the contact sharing.
      */
     public boolean isContactSharingVisible() {
+        if (true) {
+            return false;
+        }
         if (Flags.hidePhonebookAccessToggleForWearableDevicesWhenPairing()) {
             return !isProfileReady()
                     && (mDevice.getBluetoothClass().getMajorDeviceClass()
@@ -463,6 +466,7 @@ public class BluetoothPairingController implements OnCheckedChangeListener,
         switch (mType) {
             case BluetoothDevice.PAIRING_VARIANT_PIN:
             case BluetoothDevice.PAIRING_VARIANT_PIN_16_DIGITS:
+            case BluetoothDevice.PAIRING_VARIANT_PASSKEY:
                 mDevice.setPin(passkey);
                 break;
 
@@ -475,7 +479,6 @@ public class BluetoothPairingController implements OnCheckedChangeListener,
             case BluetoothDevice.PAIRING_VARIANT_DISPLAY_PASSKEY:
             case BluetoothDevice.PAIRING_VARIANT_DISPLAY_PIN:
             case BluetoothDevice.PAIRING_VARIANT_OOB_CONSENT:
-            case BluetoothDevice.PAIRING_VARIANT_PASSKEY:
                 // Do nothing.
                 break;
 
