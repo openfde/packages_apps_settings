@@ -95,6 +95,7 @@ import android.view.WindowInsetsController;
 import android.graphics.Color;
 import android.graphics.Rect;
 import androidx.core.view.OnApplyWindowInsetsListener;
+import android.app.ActivityTaskManager;
 
 /** Settings homepage activity */
 public class SettingsHomepageActivity extends FragmentActivity implements
@@ -121,6 +122,7 @@ public class SettingsHomepageActivity extends FragmentActivity implements
     private TopLevelSettings mMainFragment;
     private View mHomepageView;
     private View mSuggestionView;
+    private View captionTitle;
     private CategoryMixin mCategoryMixin;
     private Set<HomepageLoadedListener> mLoadedListeners;
     private boolean mIsEmbeddingActivityEnabled;
@@ -250,24 +252,24 @@ public class SettingsHomepageActivity extends FragmentActivity implements
         final boolean isEmbeddedDeepLink = shouldLaunchDeepLinkIntentToRight();
         final boolean isDeepLinkStartedFromSearch = getIntent().getBooleanExtra(
                 EXTRA_IS_DEEPLINK_HOME_STARTED_FROM_SEARCH, false /* defaultValue */);
-        if (!isTaskRoot && !isDeepLinkStartedFromSearch) {
-            if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_NEW_TASK) != 0
-                    && !isEmbeddedDeepLink) {
-                Log.i(TAG, "Activity has been started, finishing");
-            } else {
-                Log.i(TAG, "Homepage is not started as the task root, restarting");
-                Intent intent = new Intent(getIntent())
-                        .setPackage(getPackageName())
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                                | Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                | Intent.FLAG_ACTIVITY_FORWARD_RESULT)
-                        .putExtra(EXTRA_USER_HANDLE, getUser())
-                        .putExtra(EXTRA_INITIAL_REFERRER, getCurrentReferrer());
-                startActivity(intent);
-            }
-            finish();
-            return;
-        }
+        // if (!isTaskRoot && !isDeepLinkStartedFromSearch) {
+        //     if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_NEW_TASK) != 0
+        //             && !isEmbeddedDeepLink) {
+        //         Log.i(TAG, "Activity has been started, finishing");
+        //     } else {
+        //         Log.i(TAG, "Homepage is not started as the task root, restarting");
+        //         Intent intent = new Intent(getIntent())
+        //                 .setPackage(getPackageName())
+        //                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+        //                         | Intent.FLAG_ACTIVITY_CLEAR_TASK
+        //                         | Intent.FLAG_ACTIVITY_FORWARD_RESULT)
+        //                 .putExtra(EXTRA_USER_HANDLE, getUser())
+        //                 .putExtra(EXTRA_INITIAL_REFERRER, getCurrentReferrer());
+        //         startActivity(intent);
+        //     }
+        //     finish();
+        //     return;
+        // }
 
         setupEdgeToEdge();
         setContentView(R.layout.settings_homepage_container);
@@ -347,10 +349,51 @@ public class SettingsHomepageActivity extends FragmentActivity implements
      
     }
 
+    public  String getTopPackageName() {
+    try {
+            ActivityTaskManager atm = ActivityTaskManager.getInstance();
+            List<ActivityManager.RunningTaskInfo> tasks = atm.getTasks(1);
+            if (tasks != null && !tasks.isEmpty()) {
+                ComponentName topActivity = tasks.get(0).topActivity;
+                if (topActivity != null) {
+                    String packageName = topActivity.getPackageName();
+                    Log.d("TopApp", "packageName=" + packageName);
+                    return packageName;
+                }
+            }
+        } catch (Exception e) {
+            Log.e("TopApp", "Failed to get top package", e);
+        }
+        return null;
+    }
+
+    private void updateCationTitle(){
+        captionTitle = findViewById(R.id.caption_title);
+        if(captionTitle!=null){
+            if(getTopPackageName().equals(getPackageName())){
+                captionTitle.setVisibility(View.VISIBLE);
+            }else{
+                captionTitle.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        updateCationTitle();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         SettingsNavigationHistory.get().record(getIntent());
+        
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 
     @Override
@@ -592,6 +635,7 @@ public class SettingsHomepageActivity extends FragmentActivity implements
 
         mSuggestionView = findViewById(R.id.suggestion_content);
         mHomepageView = findViewById(R.id.settings_homepage_container);
+        captionTitle = findViewById(R.id.caption_title);
         // Hide the homepage for preparing the suggestion. If scrolling is needed, the list views
         // should be initialized in the invisible homepage view to prevent a scroll flicker.
         mHomepageView.setVisibility(scrollNeeded ? View.INVISIBLE : View.GONE);

@@ -25,11 +25,11 @@
         android:id="@+id/search_action_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="60dp"
+        android:minHeight="56dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
         android:focusedByDefault="true"
         android:background="@drawable/search_bar_selected_background">
 

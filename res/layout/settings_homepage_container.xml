@@ -38,16 +38,18 @@
     </LinearLayout>
 
     <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/caption_bar_height"
-            android:layout_gravity="start"
-            android:textAlignment="viewStart"
-            android:singleLine="true"
-            android:gravity="center_vertical"
-            android:text="@string/settings_label_launcher"
-            android:layout_marginLeft="48dp"
-            android:textAppearance="?android:attr/textAppearanceListItem"
-            android:textColor="@color/settingslib_text_color_primary"/>
+        android:id="@+id/caption_title"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/caption_bar_height"
+        android:layout_gravity="start"
+        android:textAlignment="viewStart"
+        android:singleLine="true"
+        android:gravity="center_vertical"
+        android:fontFamily="@font/alibaba_puhui_55_regular_55_regular"
+        android:text="@string/settings_label_launcher"
+        android:layout_marginLeft="48dp"
+        android:textAppearance="?android:attr/textAppearanceListItem"
+        android:textColor="@color/settingslib_text_color_primary"/>
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"

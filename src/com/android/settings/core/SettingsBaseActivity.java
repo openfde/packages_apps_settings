@@ -107,7 +107,6 @@ public class SettingsBaseActivity extends FragmentActivity implements CategoryHa
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         final boolean isAnySetupWizard = WizardManagerHelper.isAnySetupWizard(getIntent());
-        Log.w(TAG, "bella_settings isAnySetupWizard "+isAnySetupWizard);
         if (isAnySetupWizard) {
             // Apply SetupWizard light theme during setup flow. This is for SubSettings pages.
             if (this instanceof SubSettings) {
