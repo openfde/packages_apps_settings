@@ -15,26 +15,17 @@
  */
 package com.android.settings.display
 
-import android.app.ActivityOptions
 import android.app.settings.SettingsEnums.ACTION_BRIGHTNESS_LEVEL
 import android.content.Context
-import android.content.Intent
-import android.content.Intent.ACTION_SHOW_BRIGHTNESS_DIALOG
-import android.content.Intent.EXTRA_BRIGHTNESS_DIALOG_IS_FULL_WIDTH
 import android.hardware.display.BrightnessInfo
 import android.hardware.display.DisplayManager
 import android.hardware.display.DisplayManager.DisplayListener
-import android.os.UserHandle
 import android.os.UserManager
 import android.provider.Settings.System
-import androidx.preference.Preference
 import com.android.settings.R
-import com.android.settings.Utils
 import com.android.settings.contract.KEY_BRIGHTNESS_LEVEL
-import com.android.settings.core.SettingsBaseActivity
 import com.android.settings.metrics.PreferenceActionMetricsProvider
 import com.android.settings.restriction.PreferenceRestrictionMixin
-import com.android.settingslib.RestrictedPreference
 import com.android.settingslib.datastore.AbstractKeyedDataObservable
 import com.android.settingslib.datastore.HandlerExecutor
 import com.android.settingslib.datastore.KeyValueStore
@@ -48,24 +39,21 @@ import com.android.settingslib.metadata.IntRangeValuePreference
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
 import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceChangeReason
-import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceSummaryProvider
 import com.android.settingslib.metadata.ReadWritePermit
 import com.android.settingslib.metadata.SensitivityLevel
-import com.android.settingslib.preference.PreferenceBinding
-import com.android.settingslib.transition.SettingsTransitionHelper
-import com.android.systemui.shared.Flags.brightnessDialogOnSystemUser
+import com.android.settingslib.widget.SliderPreference
+import com.android.settingslib.widget.SliderPreferenceBinding
 import java.math.BigDecimal
 import java.text.NumberFormat
 
 // LINT.IfChange
 class BrightnessLevelPreference :
     IntRangeValuePreference,
-    PreferenceBinding,
+    SliderPreferenceBinding,
     PreferenceRestrictionMixin,
     PreferenceActionMetricsProvider,
     PreferenceSummaryProvider,
-    Preference.OnPreferenceClickListener,
     PreferenceAvailabilityProvider {
 
     override val key: String
@@ -100,21 +88,10 @@ class BrightnessLevelPreference :
     override val useAdminDisabledSummary: Boolean
         get() = true
 
-    override fun intent(context: Context): Intent? =
-        Intent(ACTION_SHOW_BRIGHTNESS_DIALOG)
-            .setPackage(Utils.SYSTEMUI_PACKAGE_NAME)
-            .putExtra(
-                SettingsBaseActivity.EXTRA_PAGE_TRANSITION_TYPE,
-                SettingsTransitionHelper.TransitionType.TRANSITION_NONE,
-            )
-            .putExtra(EXTRA_BRIGHTNESS_DIALOG_IS_FULL_WIDTH, true)
-
-    override fun createWidget(context: Context) = RestrictedPreference(context)
-
-    override fun bind(preference: Preference, metadata: PreferenceMetadata) {
-        super.bind(preference, metadata)
-        preference.onPreferenceClickListener = this
-        preference.isPersistent = false
+    override fun createWidget(context: Context) = SliderPreference(context).apply {
+        updatesContinuously = true
+        setShowSliderValue(true)
+        setHapticFeedbackMode(SliderPreference.HAPTIC_FEEDBACK_MODE_ON_ENDS)
     }
 
     // Note that we *currently* use restricted APIs to obtain the brightness value, but the
@@ -199,23 +176,6 @@ class BrightnessLevelPreference :
         override fun onDisplayChanged(displayId: Int) {
             notifyChange(KEY, PreferenceChangeReason.STATE)
         }
-    }
-
-    override fun onPreferenceClick(preference: Preference): Boolean {
-        val context = preference.context
-        val options =
-            ActivityOptions.makeCustomAnimation(
-                context,
-                android.R.anim.fade_in,
-                android.R.anim.fade_out,
-            )
-        if (brightnessDialogOnSystemUser()) {
-            options.setOverrideTaskTransition(true)
-            context.startActivityAsUser(intent(context)!!, options.toBundle(), UserHandle.SYSTEM)
-        } else {
-            context.startActivityForResult(preference.key, intent(context), 0, options.toBundle())
-        }
-        return true
     }
 
     override val availabilityDescription =

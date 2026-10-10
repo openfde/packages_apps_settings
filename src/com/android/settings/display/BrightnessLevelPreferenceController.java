@@ -45,14 +45,15 @@ import androidx.preference.PreferenceScreen;
 
 import com.android.settings.R;
 import com.android.settings.Utils;
-import com.android.settings.core.BasePreferenceController;
 import com.android.settings.core.PreferenceControllerMixin;
 import com.android.settings.core.SettingsBaseActivity;
+import com.android.settings.core.SliderPreferenceController;
 import com.android.settingslib.core.lifecycle.Lifecycle;
 import com.android.settingslib.core.lifecycle.LifecycleObserver;
 import com.android.settingslib.core.lifecycle.events.OnStart;
 import com.android.settingslib.core.lifecycle.events.OnStop;
 import com.android.settingslib.transition.SettingsTransitionHelper;
+import com.android.settingslib.widget.SliderPreference;
 
 import java.text.NumberFormat;
 
@@ -60,7 +61,7 @@ import java.text.NumberFormat;
  * The top-level preference controller that updates the adaptive brightness level.
  */
 // LINT.IfChange
-public class BrightnessLevelPreferenceController extends BasePreferenceController implements
+public class BrightnessLevelPreferenceController extends SliderPreferenceController implements
         PreferenceControllerMixin, LifecycleObserver, OnStart, OnStop {
     private static final Uri BRIGHTNESS_ADJ_URI;
     private final ContentResolver mContentResolver;
@@ -77,7 +78,7 @@ public class BrightnessLevelPreferenceController extends BasePreferenceControlle
             new ContentObserver(mHandler) {
                 @Override
                 public void onChange(boolean selfChange) {
-                    updatedSummary(mPreference);
+                    updateState(mPreference);
                 }
             };
 
@@ -92,7 +93,7 @@ public class BrightnessLevelPreferenceController extends BasePreferenceControlle
 
         @Override
         public void onDisplayChanged(int displayId) {
-            updatedSummary(mPreference);
+            updateState(mPreference);
         }
     };
 
@@ -120,15 +121,28 @@ public class BrightnessLevelPreferenceController extends BasePreferenceControlle
     @Override
     public void displayPreference(PreferenceScreen screen) {
         super.displayPreference(screen);
-        mPreference = screen.findPreference(getPreferenceKey());
+        final Preference preference = screen.findPreference(getPreferenceKey());
+        mPreference = preference;
+        if (preference instanceof SliderPreference sliderPreference) {
+            sliderPreference.setUpdatesContinuously(true);
+            sliderPreference.setMin(getMin());
+            sliderPreference.setMax(getMax());
+            sliderPreference.setHapticFeedbackMode(SliderPreference.HAPTIC_FEEDBACK_MODE_ON_ENDS);
+            sliderPreference.setSliderContentDescription(
+                    mContext.getString(R.string.brightness_slider_description));
+        }
     }
 
     @Override
     public void updateState(Preference preference) {
+        if (preference == null) {
+            return;
+        }
         if (preference.isEnabled() && UserManager.get(mContext).hasBaseUserRestriction(
                 UserManager.DISALLOW_CONFIG_BRIGHTNESS, Process.myUserHandle())) {
             preference.setEnabled(false);
         }
+        super.updateState(preference);
         updatedSummary(preference);
     }
 
@@ -137,7 +151,7 @@ public class BrightnessLevelPreferenceController extends BasePreferenceControlle
         mContentResolver.registerContentObserver(BRIGHTNESS_ADJ_URI, false, mBrightnessObserver);
         mDisplayManager.registerDisplayListener(mDisplayListener, mHandler,
                 DisplayManager.EVENT_TYPE_DISPLAY_BRIGHTNESS);
-        updatedSummary(mPreference);
+        updateState(mPreference);
     }
 
     @Override
@@ -148,6 +162,8 @@ public class BrightnessLevelPreferenceController extends BasePreferenceControlle
 
     @Override
     public boolean handlePreferenceTreeClick(Preference preference) {
+        // The inline brightness slider in the display settings is not clickable, so this path is
+        // only taken for clickable (non-slider) brightness preferences, e.g. in the SetupWizard.
         if (!TextUtils.equals(preference.getKey(), getPreferenceKey())) {
             return false;
         }
@@ -167,6 +183,29 @@ public class BrightnessLevelPreferenceController extends BasePreferenceControlle
             mContext.startActivityForResult(preference.getKey(), intent, 0, options.toBundle());
         }
         return true;
+    }
+
+    @Override
+    public int getSliderPosition() {
+        return (int) Math.round(getCurrentBrightness() * getMax());
+    }
+
+    @Override
+    public boolean setSliderPosition(int position) {
+        position = Math.max(getMin(), Math.min(getMax(), position));
+        mDisplayManager.setBrightness(mContext.getDisplay().getDisplayId(), position,
+                DisplayManager.BRIGHTNESS_UNIT_PERCENTAGE);
+        return true;
+    }
+
+    @Override
+    public int getMax() {
+        return 100;
+    }
+
+    @Override
+    public int getMin() {
+        return 0;
     }
 
     private void updatedSummary(Preference preference) {

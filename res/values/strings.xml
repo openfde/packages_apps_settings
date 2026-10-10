@@ -3199,6 +3199,8 @@
     <string name="preference_key_auto_brightness" translatable="false">auto_brightness_entry</string>
     <!-- Sound & display settings screen, setting option name to change brightness level -->
     <string name="brightness">Brightness level</string>
+    <!-- Brightness level slider description for screen reader. -->
+    <string name="brightness_slider_description">Brightness, make the screen dimmer or brighter.</string>
     <!-- Sound & display settings screen, setting option name to enable adaptive brightness [CHAR LIMIT=30] -->
     <string name="auto_brightness_title">Adaptive brightness</string>
     <!-- Description about the feature adaptive brightness -->
