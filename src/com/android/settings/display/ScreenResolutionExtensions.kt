@@ -40,7 +40,7 @@ private fun Context.getSortedResolutionList(): List<Point>? {
     val resolutions =
         display.supportedModes.mapTo(mutableSetOf()) { Point(it.physicalWidth, it.physicalHeight) }
 
-    if (resolutions.size != 2) {
+    if (resolutions.size < 2) {
         Log.e(TAG, "No support")
         return null
     }
@@ -72,21 +72,25 @@ fun Context.getFullResolutionDisplayHeight(): Int = getSortedResolutionList()?.g
 fun Context.getDisplayWidth(): Int = getDefaultDisplay()?.mode?.physicalWidth ?: 0
 
 /** Get preferred display mode. */
-private fun Context.getPreferMode(width: Int): Display.Mode? {
+private fun Context.getPreferMode(width: Int, height: Int = 0): Display.Mode? {
     val display = getDefaultDisplay() ?: return null
     val currentMode = display.mode
     // Find the mode with the matching width, preserving the current refresh rate
     return display.supportedModes.find {
-        it.physicalWidth == width && it.refreshRate == currentMode.refreshRate
-    } ?: display.supportedModes.find { it.physicalWidth == width } // Fallback to any refresh rate
+        it.physicalWidth == width
+            && (height == 0 || it.physicalHeight == height)
+            && it.refreshRate == currentMode.refreshRate
+    } ?: display.supportedModes.find {
+        it.physicalWidth == width && (height == 0 || it.physicalHeight == height)
+    } // Fallback to any refresh rate
 }
 
 /** Using display manager to set the display mode. */
-fun Context.setDisplayModeByWidth(width: Int) {
+fun Context.setDisplayModeByWidth(width: Int, height: Int = 0) {
     val display = getDefaultDisplay() ?: return
-    val mode = getPreferMode(width)
+    val mode = getPreferMode(width, height)
     if (mode == null) {
-        Log.e(TAG, "No preferred mode found for width: $width")
+        Log.e(TAG, "No preferred mode found for width: $width height: $height")
         return
     }
 

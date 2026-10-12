@@ -45,6 +45,7 @@ import com.android.settingslib.widget.SelectorWithWidgetPreference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.Collections;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /** Preference fragment used for switch screen resolution */
@@ -57,7 +58,7 @@ public class ScreenResolutionFragment extends RadioButtonPickerFragment {
     private static final String SCREEN_RESOLUTION = "user_selected_resolution";
     private static final String SCREEN_RESOLUTION_KEY = "screen_resolution";
     private Display mDefaultDisplay;
-    private String[] mScreenResolutionOptions;
+    private List<Point> mResolutionList;
     private Set<Point> mResolutions;
     private SpannableString[] mScreenResolutionSummaries;
 
@@ -74,23 +75,24 @@ public class ScreenResolutionFragment extends RadioButtonPickerFragment {
         mDefaultDisplay =
                 context.getSystemService(DisplayManager.class).getDisplay(Display.DEFAULT_DISPLAY);
         mResources = context.getResources();
-        mScreenResolutionOptions =
-                mResources.getStringArray(R.array.config_screen_resolution_options_strings);
         mImagePreference = new IllustrationPreference(context);
         mDisplayObserver = new DisplayObserver(context);
         ScreenResolutionController controller =
                 new ScreenResolutionController(context, SCREEN_RESOLUTION_KEY);
-        mResolutions = controller.getAllSupportedResolutions();
-        mHighWidth = ScreenResolutionExtensionsKt.getHighResolutionDisplayWidth(context);
-        mFullWidth = ScreenResolutionExtensionsKt.getFullResolutionDisplayWidth(context);
-        Log.i(TAG, "mHighWidth:" + mHighWidth + "mFullWidth:" + mFullWidth);
-        mScreenResolutionSummaries =
-                new SpannableString[] {
-                    getResolutionSpannable(mHighWidth,
-                        ScreenResolutionExtensionsKt.getHighResolutionDisplayHeight(context)),
-                    getResolutionSpannable(mFullWidth,
-                        ScreenResolutionExtensionsKt.getFullResolutionDisplayHeight(context))
-                };
+        Set<Point> resolutionSet = controller.getAllSupportedResolutions();
+        mResolutions = resolutionSet;
+        mResolutionList = new ArrayList<>(resolutionSet);
+        Collections.sort(mResolutionList, (a, b) -> a.x * a.y - b.x * b.y);
+        mScreenResolutionSummaries = new SpannableString[mResolutionList.size()];
+        for (int i = 0; i < mResolutionList.size(); i++) {
+            Point p = mResolutionList.get(i);
+            mScreenResolutionSummaries[i] = getResolutionSpannable(p.x, p.y);
+        }
+        if (!mResolutionList.isEmpty()) {
+            mHighWidth = mResolutionList.get(0).x;
+            mFullWidth = mResolutionList.get(mResolutionList.size() - 1).x;
+        }
+        Log.i(TAG, "resolutions=" + mResolutionList.size());
     }
 
 
@@ -135,13 +137,12 @@ public class ScreenResolutionFragment extends RadioButtonPickerFragment {
     protected List<? extends CandidateInfo> getCandidates() {
         final List<ScreenResolutionCandidateInfo> candidates = new ArrayList<>();
 
-        for (int i = 0; i < mScreenResolutionOptions.length; i++) {
+        for (int i = 0; i < mResolutionList.size(); i++) {
+            Point p = mResolutionList.get(i);
+            String key = p.x + "x" + p.y;
+            String label = p.x + " x " + p.y;
             candidates.add(
-                    new ScreenResolutionCandidateInfo(
-                            mScreenResolutionOptions[i],
-                            mScreenResolutionSummaries[i],
-                            mScreenResolutionOptions[i],
-                            true /* enabled */));
+                    new ScreenResolutionCandidateInfo(label, null, key, true /* enabled */));
         }
 
         return candidates;
@@ -155,45 +156,45 @@ public class ScreenResolutionFragment extends RadioButtonPickerFragment {
 
     /** Using display manager to set the display mode. */
     @VisibleForTesting
-    public void setDisplayMode(final int width) {
+    public void setDisplayMode(final int width, final int height) {
         mDisplayObserver.startObserve();
-        ScreenResolutionExtensionsKt.setDisplayModeByWidth(getContext(), width);
+        ScreenResolutionExtensionsKt.setDisplayModeByWidth(getContext(), width, height);
     }
 
-    /** Get the key corresponding to the resolution. */
+    /** Parse a "WxH" resolution key into a Point, or null if malformed. */
     @VisibleForTesting
-    String getKeyForResolution(int width) {
-        return width == mHighWidth
-                ? mScreenResolutionOptions[ScreenResolutionController.HIGHRESOLUTION_IDX]
-                : width == mFullWidth
-                        ? mScreenResolutionOptions[ScreenResolutionController.FULLRESOLUTION_IDX]
-                        : null;
-    }
-
-    /** Get the width corresponding to the resolution key. */
-    int getWidthForResoluitonKey(String key) {
-        return mScreenResolutionOptions[ScreenResolutionController.HIGHRESOLUTION_IDX].equals(key)
-                ? mHighWidth
-                : mScreenResolutionOptions[ScreenResolutionController.FULLRESOLUTION_IDX].equals(
-                    key)
-                ? mFullWidth : -1;
+    Point parseResolutionKey(String key) {
+        if (key == null) {
+            return null;
+        }
+        int idx = key.indexOf('x');
+        if (idx <= 0 || idx >= key.length() - 1) {
+            return null;
+        }
+        try {
+            int width = Integer.parseInt(key.substring(0, idx));
+            int height = Integer.parseInt(key.substring(idx + 1));
+            return new Point(width, height);
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
     @Override
     protected String getDefaultKey() {
-        int physicalWidth = getDisplayMode().getPhysicalWidth();
+        Display.Mode mode = getDisplayMode();
 
-        return getKeyForResolution(physicalWidth);
+        return mode.getPhysicalWidth() + "x" + mode.getPhysicalHeight();
     }
 
     @Override
     protected boolean setDefaultKey(final String key) {
-        int width = getWidthForResoluitonKey(key);
-        if (width < 0) {
+        Point wh = parseResolutionKey(key);
+        if (wh == null) {
             return false;
         }
 
-        setDisplayMode(width);
+        setDisplayMode(wh.x, wh.y);
         updateIllustrationImage(mImagePreference);
 
         return true;
@@ -202,8 +203,11 @@ public class ScreenResolutionFragment extends RadioButtonPickerFragment {
     @Override
     public void onRadioButtonClicked(SelectorWithWidgetPreference selected) {
         String selectedKey = selected.getKey();
-        int selectedWidth = getWidthForResoluitonKey(selectedKey);
-        if (!mDisplayObserver.setPendingResolutionChange(selectedWidth)) {
+        Point wh = parseResolutionKey(selectedKey);
+        if (wh == null) {
+            return;
+        }
+        if (!mDisplayObserver.setPendingResolutionChange(wh.x, wh.y)) {
             return;
         }
 
@@ -212,13 +216,16 @@ public class ScreenResolutionFragment extends RadioButtonPickerFragment {
 
     /** Update the resolution image according display mode. */
     private void updateIllustrationImage(IllustrationPreference preference) {
+        if (mResolutionList.isEmpty()) {
+            return;
+        }
         String key = getDefaultKey();
-        if (TextUtils.equals(
-                mScreenResolutionOptions[ScreenResolutionController.HIGHRESOLUTION_IDX], key)) {
+        Point min = mResolutionList.get(0);
+        Point max = mResolutionList.get(mResolutionList.size() - 1);
+        if (TextUtils.equals(min.x + "x" + min.y, key)) {
             preference.setLottieAnimationResId(R.raw.lottie_screen_resolution_high);
             preference.applyDynamicColor();
-        } else if (TextUtils.equals(
-                mScreenResolutionOptions[ScreenResolutionController.FULLRESOLUTION_IDX], key)) {
+        } else {
             preference.setLottieAnimationResId(R.raw.lottie_screen_resolution_full);
             preference.applyDynamicColor();
         }
@@ -274,8 +281,6 @@ public class ScreenResolutionFragment extends RadioButtonPickerFragment {
 
     private static final class DisplayObserver implements DisplayManager.DisplayListener {
         private final @Nullable Context mContext;
-        private int mDefaultDensity;
-        private int mCurrentIndex;
         private AtomicInteger mPreviousWidth = new AtomicInteger(-1);
 
         DisplayObserver(Context context) {
@@ -289,14 +294,13 @@ public class ScreenResolutionFragment extends RadioButtonPickerFragment {
 
             final DisplayDensityUtils density = new DisplayDensityUtils(mContext);
             final int currentIndex = density.getCurrentIndex();
-            final int defaultDensity = density.getDefaultDensity();
 
-            if (density.getValues()[mCurrentIndex] == density.getDefaultDensity()) {
+            if (currentIndex < 0
+                    || density.getValues()[currentIndex] == density.getDefaultDensity()) {
+                // The default density is in use, no custom density to reset.
                 return;
             }
 
-            mDefaultDensity = defaultDensity;
-            mCurrentIndex = currentIndex;
             final DisplayManager dm = mContext.getSystemService(DisplayManager.class);
             dm.registerDisplayListener(this, null);
         }
@@ -322,36 +326,14 @@ public class ScreenResolutionFragment extends RadioButtonPickerFragment {
                 return;
             }
 
-            if (!isDensityChanged() || !isResolutionChangeApplied()) {
+            if (!isResolutionChangeApplied()) {
                 return;
             }
 
-            restoreDensity();
+            // Reset to the default density of the new resolution, so the DPI follows the
+            // resolution switch instead of keeping the previous custom density.
+            new DisplayDensityUtils(mContext).clearForcedDisplayDensity();
             stopObserve();
-        }
-
-        private void restoreDensity() {
-            final DisplayDensityUtils density = new DisplayDensityUtils(mContext);
-            /* If current density is the same as a default density of other resolutions,
-             * then mCurrentIndex may be out of boundary.
-             */
-            if (density.getValues().length <= mCurrentIndex) {
-                mCurrentIndex = density.getCurrentIndex();
-            }
-            if (density.getValues()[mCurrentIndex] != density.getDefaultDensity()) {
-                density.setForcedDisplayDensity(mCurrentIndex);
-            }
-
-            mDefaultDensity = density.getDefaultDensity();
-        }
-
-        private boolean isDensityChanged() {
-            final DisplayDensityUtils density = new DisplayDensityUtils(mContext);
-            if (density.getDefaultDensity() == mDefaultDensity) {
-                return false;
-            }
-
-            return true;
         }
 
         private int getCurrentWidth() {
@@ -359,17 +341,18 @@ public class ScreenResolutionFragment extends RadioButtonPickerFragment {
             return dm.getDisplay(Display.DEFAULT_DISPLAY).getMode().getPhysicalWidth();
         }
 
-        private boolean setPendingResolutionChange(int selectedWidth) {
-            int currentWidth = getCurrentWidth();
-
-            if (selectedWidth == currentWidth) {
+        private boolean setPendingResolutionChange(int selectedWidth, int selectedHeight) {
+            final DisplayManager dm = mContext.getSystemService(DisplayManager.class);
+            final Display.Mode current = dm.getDisplay(Display.DEFAULT_DISPLAY).getMode();
+            if (selectedWidth == current.getPhysicalWidth()
+                    && selectedHeight == current.getPhysicalHeight()) {
                 return false;
             }
             if (mPreviousWidth.get() != -1 && !isResolutionChangeApplied()) {
                 return false;
             }
 
-            mPreviousWidth.set(currentWidth);
+            mPreviousWidth.set(current.getPhysicalWidth());
 
             return true;
         }
