@@ -59,7 +59,7 @@ public class ScreenResolutionFragmentTest {
         doReturn(mContext).when(mFragment).getContext();
 
         mFragment.onAttach(mContext);
-        assertThat(mFragment.getDefaultKey()).isEqualTo(mFragment.getKeyForResolution(mHighWidth));
+        assertThat(mFragment.getDefaultKey()).isEqualTo(mHighWidth + "x0");
     }
 
     @Test
@@ -70,7 +70,7 @@ public class ScreenResolutionFragmentTest {
         doReturn(mContext).when(mFragment).getContext();
 
         mFragment.onAttach(mContext);
-        assertThat(mFragment.getDefaultKey()).isEqualTo(mFragment.getKeyForResolution(mFullWidth));
+        assertThat(mFragment.getDefaultKey()).isEqualTo(mFullWidth + "x0");
     }
 
     @Test
@@ -79,9 +79,9 @@ public class ScreenResolutionFragmentTest {
         doReturn(mContext).when(mFragment).getContext();
         mFragment.onAttach(mContext);
 
-        mFragment.setDefaultKey(mFragment.getKeyForResolution(mHighWidth));
+        mFragment.setDefaultKey(mHighWidth + "x0");
 
-        verify(mFragment).setDisplayMode(mHighWidth);
+        verify(mFragment).setDisplayMode(mHighWidth, 0);
     }
 
     @Test
@@ -90,9 +90,9 @@ public class ScreenResolutionFragmentTest {
         doReturn(mContext).when(mFragment).getContext();
         mFragment.onAttach(mContext);
 
-        mFragment.setDefaultKey(mFragment.getKeyForResolution(mFullWidth));
+        mFragment.setDefaultKey(mFullWidth + "x0");
 
-        verify(mFragment).setDisplayMode(mFullWidth);
+        verify(mFragment).setDisplayMode(mFullWidth, 0);
     }
 
     @Test

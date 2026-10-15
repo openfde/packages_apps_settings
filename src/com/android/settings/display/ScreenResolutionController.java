@@ -70,7 +70,7 @@ public class ScreenResolutionController extends BasePreferenceController {
 
         // Get the width and height for high resolution and full resolution
         List<Point> resolutionList = new ArrayList<>(resolutions);
-        if (resolutionList == null || resolutionList.size() != 2) {
+        if (resolutionList == null || resolutionList.size() < 2) {
             Log.e(TAG, "No support");
             return;
         }
@@ -91,17 +91,21 @@ public class ScreenResolutionController extends BasePreferenceController {
 
     @Override
     public CharSequence getSummary() {
-        String summary = null;
-        int width = getDisplayWidth();
+        final int width = getDisplayWidth();
         if (width == mHighWidth) {
-            summary = mContext.getString(R.string.screen_resolution_option_high);
+            return mContext.getString(R.string.screen_resolution_option_high);
         } else if (width == mFullWidth) {
-            summary = mContext.getString(R.string.screen_resolution_option_full);
+            return mContext.getString(R.string.screen_resolution_option_full);
         } else {
-            summary = mContext.getString(R.string.screen_resolution_title);
+            // More than two resolutions are supported (or the current one is not one of the
+            // lowest/highest). Fall back to showing the actual resolution instead of a generic
+            // title.
+            final Display.Mode mode = mDisplay.getMode();
+            return mContext.getString(
+                    R.string.screen_resolution_displayed_text,
+                    mode.getPhysicalWidth(),
+                    mode.getPhysicalHeight());
         }
-
-        return summary;
     }
 
     /** Return all supported resolutions of the device. */
