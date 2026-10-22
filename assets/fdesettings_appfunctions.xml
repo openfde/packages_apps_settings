@@ -2,9 +2,11 @@
 <!--
   Settings App Functions 静态描述（框架 legacy XML asset 格式，由系统 AppSearch 索引读取）。
 
-  通过 App Functions 暴露“打开指定系统设置页面”的能力，供系统智能体（Agent）/
-  App Function 调用方使用：
+  通过 App Functions 暴露“打开指定系统设置页面”与“调节屏幕亮度”能力，
+  供系统智能体（Agent）/ App Function 调用方使用：
     - openSettingsPage  打开指定设置页面（参数 page: wifi/display/sound/apps/storage）
+    - adjustBrightness  调节屏幕亮度（参数 action: dim/brighten，可选 step: 每次调节的
+      亮度百分比，默认 10；亮度换算逻辑参考 BrightnessLevelPreference.kt）
 
   功能与 FdeSystemControl 的 SystemControlService.openSettingsPage 保持一致。
   该 XML 由 OpenSettingsPageAppFunctionService 通过
@@ -14,6 +16,13 @@
     <appfunction>
         <function_id>openSettingsPage</function_id>
         <schema_name>openSettingsPage</schema_name>
+        <schema_version>1</schema_version>
+        <schema_category>settings</schema_category>
+        <enabled_by_default>true</enabled_by_default>
+    </appfunction>
+    <appfunction>
+        <function_id>adjustBrightness</function_id>
+        <schema_name>adjustBrightness</schema_name>
         <schema_version>1</schema_version>
         <schema_category>settings</schema_category>
         <enabled_by_default>true</enabled_by_default>
