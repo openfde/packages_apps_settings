@@ -6,6 +6,8 @@
     - openSettingsPage  打开指定设置页面（参数 page: wifi/display/sound/apps/storage）
     - adjustBrightness  调节屏幕亮度（参数 action: dim/brighten，可选 step: 每次调节的
       亮度百分比，默认 10；亮度换算逻辑参考 BrightnessLevelPreference.kt）
+    - adjustMediaVolume 调节媒体音量（参数 action: volume_up/volume_down，可选 step: 每次
+      调节的音量百分比，默认 10）
     - setDarkTheme      开启/关闭深色主题（参数 action: on/off）
     - openApp           按包名或应用名打开某个应用（参数 packageName 或 appName，至少提供一个）
 
@@ -24,6 +26,13 @@
     <appfunction>
         <function_id>adjustBrightness</function_id>
         <schema_name>adjustBrightness</schema_name>
+        <schema_version>1</schema_version>
+        <schema_category>settings</schema_category>
+        <enabled_by_default>true</enabled_by_default>
+    </appfunction>
+    <appfunction>
+        <function_id>adjustMediaVolume</function_id>
+        <schema_name>adjustMediaVolume</schema_name>
         <schema_version>1</schema_version>
         <schema_category>settings</schema_category>
         <enabled_by_default>true</enabled_by_default>
