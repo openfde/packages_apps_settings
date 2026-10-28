@@ -342,4 +342,9 @@
     <color name="mid_text"> #666 </color>
     <color name="light_text"> #999 </color>
     <color name="homepage_compatible_background">#3D9140</color>
+
+    <!-- FDE pages: consistent list hairline divider (modern Settings style) -->
+    <color name="fde_divider">#1A000000</color>
+    <!-- FDE pages: press / hover feedback overlay -->
+    <color name="fde_pressed">#14000000</color>
 </resources>

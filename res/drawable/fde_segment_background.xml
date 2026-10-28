@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 网络页分段控件(有线/无线)容器背景：浅灰圆角 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#12000000" />
+    <corners android:radius="8dp" />
+</shape>

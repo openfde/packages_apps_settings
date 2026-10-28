@@ -6288,6 +6288,24 @@
             </intent-filter>
         </service>
 
+        <!--
+        通过 App Functions 向系统智能体（Agent）暴露"打开设置页面"能力（参数 page:
+        wifi/display/sound/apps/storage，行为与 FdeSystemControl 的
+        SystemControlService.openSettingsPage 保持一致）以及"调节屏幕亮度"能力
+        （参数 action: dim/brighten，可选 step），功能定义见
+        assets/fdesettings_appfunctions.xml。
+        -->
+        <service
+            android:name=".appfunctions.OpenSettingsPageAppFunctionService"
+            android:permission="android.permission.BIND_APP_FUNCTION_SERVICE"
+            android:exported="true">
+            <property android:name="android.app.appfunctions"
+                android:value="fdesettings_appfunctions.xml"/>
+            <intent-filter>
+                <action android:name="android.app.appfunctions.AppFunctionService"/>
+            </intent-filter>
+        </service>
+
         <!-- This is the longest AndroidManifest.xml ever. -->
 
     </application>
