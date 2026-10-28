@@ -68,10 +68,14 @@ import java.util.Map;
  *     {@link UiModeManager#setNightModeActivated(boolean)} 切换，行为与
  *     {@code DarkModeActivationPreferenceController} 一致。</li>
  *     <li>{@code adjustMediaVolume}：调节媒体音量。参数 {@code action}（必填）：
- *     {@code volume_up}（调高）/ {@code volume_down}（调低），{@code step}（可选，默认 10）
- *     为每次调节的音量百分比，映射到媒体音量的分档范围
- *     {@code [getStreamMinVolume, getStreamMaxVolume]}，通过
- *     {@link AudioManager#setStreamVolume(int, int, int)} 写回。</li>
+ *     {@code volume_up}（调高）/ {@code volume_down}（调低）/ {@code mute}（静音）/
+ *     {@code unmute}（取消静音），{@code step}（可选，默认 10）为每次调节的音量百分比，
+ *     映射到媒体音量的分档范围 {@code [getStreamMinVolume, getStreamMaxVolume]}。
+ *     {@code volume_up}/{@code volume_down} 通过
+ *     {@link AudioManager#setStreamVolume(int, int, int)} 写回，{@code mute}/{@code unmute}
+ *     通过 {@link AudioManager#adjustStreamVolume(int, int, int)} 的
+ *     {@link AudioManager#ADJUST_MUTE} / {@link AudioManager#ADJUST_UNMUTE} 切换媒体流静音
+ *     状态，结果文档用 {@code muted} 字段回传调节后的静音状态。</li>
  *     <li>{@code openApp}：按包名或应用名打开某个应用。参数 {@code packageName}（可选）或
  *     {@code appName}（可选），至少提供一个，同时提供时以 {@code packageName} 优先：
  *     <ul>
@@ -116,9 +120,12 @@ public class OpenSettingsPageAppFunctionService extends AppFunctionService {
     private static final String ACTION_DIM = "dim";
     private static final String ACTION_BRIGHTEN = "brighten";
 
-    /** adjustMediaVolume 的 action 取值：volume_up（调高）/ volume_down（调低）。 */
+    /** adjustMediaVolume 的 action 取值：volume_up（调高）/ volume_down（调低）/
+     *  mute（静音）/ unmute（取消静音）。 */
     private static final String ACTION_VOLUME_UP = "volume_up";
     private static final String ACTION_VOLUME_DOWN = "volume_down";
+    private static final String ACTION_VOLUME_MUTE = "mute";
+    private static final String ACTION_VOLUME_UNMUTE = "unmute";
 
     /** setDarkTheme 的 action 取值：on（开启深色主题）/ off（关闭深色主题）。 */
     private static final String ACTION_ON = "on";
@@ -150,11 +157,14 @@ public class OpenSettingsPageAppFunctionService extends AppFunctionService {
     private static final String RESULT_PROP_PACKAGE_NAME = "packageName";
     private static final String RESULT_PROP_APP_NAME = "appName";
     private static final String RESULT_PROP_ENABLED = "enabled";
+    private static final String RESULT_PROP_MUTED = "muted";
 
     /** 成功状态值。 */
     private static final String STATUS_LAUNCH_REQUESTED = "launch_requested";
     private static final String STATUS_BRIGHTNESS_ADJUSTED = "brightness_adjusted";
     private static final String STATUS_MEDIA_VOLUME_ADJUSTED = "media_volume_adjusted";
+    private static final String STATUS_MEDIA_VOLUME_MUTED = "media_volume_muted";
+    private static final String STATUS_MEDIA_VOLUME_UNMUTED = "media_volume_unmuted";
     private static final String STATUS_DARK_THEME_SET = "dark_theme_set";
 
     /** 失败错误码，与 SystemControlService.openSettingsPage 的返回保持一致。 */
@@ -336,21 +346,32 @@ public class OpenSettingsPageAppFunctionService extends AppFunctionService {
     }
 
     /**
-     * 调节媒体音量（调高 / 调低）。
+     * 调节媒体音量（调高 / 调低 / 静音 / 取消静音）。
      *
      * <p>音量的读写基于 {@link AudioManager} 的 {@link AudioManager#STREAM_MUSIC} 流：
      * <ul>
      *     <li>读：{@link AudioManager#getStreamVolume(int)}，并换算为 0~100 的百分比
-     *     （相对 {@code [getStreamMinVolume, getStreamMaxVolume]} 分档范围）。</li>
-     *     <li>写：将 {@code step} 个百分比换算为分档步长 delta，在当前位置上增加/减少后，
-     *     通过 {@link AudioManager#setStreamVolume(int, int, int)} 写回并夹取到合法范围。</li>
+     *     （相对 {@code [getStreamMinVolume, getStreamMaxVolume]} 分档范围）；静音状态通过
+     *     {@link AudioManager#isStreamMute(int)} 读取。</li>
+     *     <li>写：{@code volume_up}/{@code volume_down} 将 {@code step} 个百分比换算为分档
+     *     步长 delta，在当前位置上增加/减少后通过
+     *     {@link AudioManager#setStreamVolume(int, int, int)} 写回并夹取到合法范围；
+     *     {@code mute}/{@code unmute} 通过
+     *     {@link AudioManager#adjustStreamVolume(int, int, int)} 的
+     *     {@link AudioManager#ADJUST_MUTE} / {@link AudioManager#ADJUST_UNMUTE} 切换静音
+     *     状态（对已处于目标状态的情况幂等无副作用）。</li>
      * </ul>
      *
      * <p>参数：
      * <ul>
-     *     <li>{@code action}（必填）：{@code volume_up}（调高）或 {@code volume_down}（调低）。</li>
-     *     <li>{@code step}（可选，默认 10）：每次调节的音量百分比，取值 1~100。</li>
+     *     <li>{@code action}（必填）：{@code volume_up}（调高）/ {@code volume_down}（调低）/
+     *     {@code mute}（静音）/ {@code unmute}（取消静音）。</li>
+     *     <li>{@code step}（可选，默认 10）：仅对 {@code volume_up}/{@code volume_down}
+     *     生效，每次调节的音量百分比，取值 1~100。</li>
      * </ul>
+     *
+     * <p><b>返回：</b> 结果文档包含 {@code before}/{@code after}（调节前后的音量百分比，
+     * 静音操作不改变音量数值，故前后一致）以及 {@code muted}（调节后的静音状态）。
      *
      * <p>{@link AppFunctionService#onExecuteFunction} 运行在主线程，这里的音量读取/写回都是
      * 轻量 IPC，不会产生阻塞主线程的耗时操作。
@@ -359,18 +380,6 @@ public class OpenSettingsPageAppFunctionService extends AppFunctionService {
             @NonNull GenericDocument parameters,
             @NonNull OutcomeReceiver<ExecuteAppFunctionResponse, AppFunctionException> callback) {
         String action = parameters.getPropertyString(PARAM_ACTION);
-        int direction;
-        if (ACTION_VOLUME_UP.equals(action)) {
-            direction = 1;
-        } else if (ACTION_VOLUME_DOWN.equals(action)) {
-            direction = -1;
-        } else {
-            Log.w(TAG, "Invalid media volume action: " + action);
-            callback.onResult(
-                    new ExecuteAppFunctionResponse(
-                            buildMediaVolumeErrorResult(action, ERROR_INVALID_ACTION)));
-            return;
-        }
 
         AudioManager audioManager = getSystemService(AudioManager.class);
         if (audioManager == null) {
@@ -392,24 +401,68 @@ public class OpenSettingsPageAppFunctionService extends AppFunctionService {
         }
         int current = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 
-        int step = DEFAULT_VOLUME_STEP_PERCENT;
-        long[] stepValues = parameters.getPropertyLongArray(PARAM_STEP);
-        if (stepValues != null && stepValues.length > 0) {
-            step = (int) Math.max(MIN_VOLUME_PERCENT + 1, Math.min(MAX_VOLUME_PERCENT, stepValues[0]));
+        int direction;
+        boolean isMuteAction;
+        boolean isUnmuteAction;
+        if (ACTION_VOLUME_UP.equals(action)) {
+            direction = 1;
+            isMuteAction = false;
+            isUnmuteAction = false;
+        } else if (ACTION_VOLUME_DOWN.equals(action)) {
+            direction = -1;
+            isMuteAction = false;
+            isUnmuteAction = false;
+        } else if (ACTION_VOLUME_MUTE.equals(action)) {
+            direction = 0;
+            isMuteAction = true;
+            isUnmuteAction = false;
+        } else if (ACTION_VOLUME_UNMUTE.equals(action)) {
+            direction = 0;
+            isMuteAction = false;
+            isUnmuteAction = true;
+        } else {
+            Log.w(TAG, "Invalid media volume action: " + action);
+            callback.onResult(
+                    new ExecuteAppFunctionResponse(
+                            buildMediaVolumeErrorResult(action, ERROR_INVALID_ACTION)));
+            return;
         }
-        // 将百分比换算为分档步长（至少 1 档）。
-        int delta = Math.max(1, (int) Math.round((max - min) * step / 100.0));
-        int target = Math.max(min, Math.min(max, current + direction * delta));
 
-        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, target, /* flags= */ 0);
+        String status;
+        if (isMuteAction) {
+            // 静音：对已静音的流幂等，无副作用。
+            audioManager.adjustStreamVolume(
+                    AudioManager.STREAM_MUSIC, AudioManager.ADJUST_MUTE, /* flags= */ 0);
+            status = STATUS_MEDIA_VOLUME_MUTED;
+        } else if (isUnmuteAction) {
+            // 取消静音：恢复静音前记住的音量；对未静音的流幂等，无副作用。
+            audioManager.adjustStreamVolume(
+                    AudioManager.STREAM_MUSIC, AudioManager.ADJUST_UNMUTE, /* flags= */ 0);
+            status = STATUS_MEDIA_VOLUME_UNMUTED;
+        } else {
+            int step = DEFAULT_VOLUME_STEP_PERCENT;
+            long[] stepValues = parameters.getPropertyLongArray(PARAM_STEP);
+            if (stepValues != null && stepValues.length > 0) {
+                step = (int) Math.max(MIN_VOLUME_PERCENT + 1, Math.min(MAX_VOLUME_PERCENT, stepValues[0]));
+            }
+            // 将百分比换算为分档步长（至少 1 档）。
+            int delta = Math.max(1, (int) Math.round((max - min) * step / 100.0));
+            int target = Math.max(min, Math.min(max, current + direction * delta));
+
+            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, target, /* flags= */ 0);
+            status = STATUS_MEDIA_VOLUME_ADJUSTED;
+        }
 
         int beforePercent = Math.round((current - min) * 100.0f / (max - min));
-        int afterPercent = Math.round((target - min) * 100.0f / (max - min));
+        int afterPercent =
+                Math.round((audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) - min)
+                        * 100.0f / (max - min));
+        boolean muted = audioManager.isStreamMute(AudioManager.STREAM_MUSIC);
         Log.i(TAG, "Media volume adjusted: " + action + " from " + beforePercent
-                + "% to " + afterPercent + "%");
+                + "% to " + afterPercent + "% muted=" + muted);
         callback.onResult(
                 new ExecuteAppFunctionResponse(
-                        buildMediaVolumeOkResult(action, beforePercent, afterPercent)));
+                        buildMediaVolumeOkResult(action, beforePercent, afterPercent, muted, status)));
     }
 
     /**
@@ -723,7 +776,7 @@ public class OpenSettingsPageAppFunctionService extends AppFunctionService {
     }
 
     private GenericDocument buildMediaVolumeOkResult(
-            @NonNull String action, int before, int after) {
+            @NonNull String action, int before, int after, boolean muted, @NonNull String status) {
         return new GenericDocument.Builder<>(
                         getPackageName(),
                         FUNCTION_ADJUST_MEDIA_VOLUME + "_result",
@@ -732,7 +785,8 @@ public class OpenSettingsPageAppFunctionService extends AppFunctionService {
                 .setPropertyString(RESULT_PROP_ACTION, action)
                 .setPropertyLong(RESULT_PROP_BEFORE, before)
                 .setPropertyLong(RESULT_PROP_AFTER, after)
-                .setPropertyString(RESULT_PROP_STATUS, STATUS_MEDIA_VOLUME_ADJUSTED)
+                .setPropertyBoolean(RESULT_PROP_MUTED, muted)
+                .setPropertyString(RESULT_PROP_STATUS, status)
                 .build();
     }
 
