@@ -45,6 +45,7 @@ import org.greenrobot.eventbus.Subscribe;
 import android.content.BroadcastReceiver
 import android.content.IntentFilter
 import android.net.ConnectivityManager
+import android.net.EthernetManager
 import android.provider.Settings
 import android.widget.Toast;
 
@@ -189,6 +190,44 @@ class FdeNetworkDashboardFragment : InstrumentedFragment() {
     fun initData(){
         viewModel.isWifiEnable(context!!);
         viewModel.getWiredData(context!!);
+        logAndSetEthernetDns();
+    }
+
+    /**
+     * 读取以太网接口当前使用的 DNS 地址并打印到日志，随后把 DNS 设置为 8.8.8.8。
+     * 仅用于验证 EthernetManager#getDnsServers / #setDnsServers，不涉及任何 UI。
+     */
+    fun logAndSetEthernetDns(){
+        GlobalScope.launch(Dispatchers.IO) {
+            try{
+                val ctx = context ?: return@launch
+                val ethernetManager = ctx.getSystemService(EthernetManager::class.java)
+                if (ethernetManager == null) {
+                    Log.w(TAG, "readDns: EthernetManager is unavailable")
+                    return@launch
+                }
+
+                val ifaces = ethernetManager.getInterfaceList()
+                if (ifaces.isEmpty()) {
+                    Log.w(TAG, "readDns: no ethernet interface available")
+                    return@launch
+                }
+
+                for (iface in ifaces) {
+                    var dnsServers = ethernetManager.getDnsServers(iface)
+                    Log.w(TAG, "readDns: iface=" + iface
+                            + ", dns=" + dnsServers.joinToString(","))
+                    ethernetManager.setDnsServers(iface, listOf(DEFAULT_DNS_SERVER))
+                    Log.w(TAG, "setDns: iface=" + iface + ", dns=" + DEFAULT_DNS_SERVER)
+                    // Read back to confirm the new servers took effect.
+                    dnsServers = ethernetManager.getDnsServers(iface)
+                    Log.w(TAG, "readDns: iface=" + iface
+                            + ", dns=" + dnsServers.joinToString(","))
+                }
+            }catch(e: Exception){
+                Log.e(TAG, "readDns/setDns failed", e)
+            }
+        }
     }
 
     fun initListen(){
@@ -610,6 +649,10 @@ class FdeNetworkDashboardFragment : InstrumentedFragment() {
 
     protected fun getIntent(): Intent? {
         return activity?.intent
+    }
+
+    companion object {
+        private const val DEFAULT_DNS_SERVER = "8.8.8.8"
     }
 
 }
