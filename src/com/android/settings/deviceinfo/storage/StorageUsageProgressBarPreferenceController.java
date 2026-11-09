@@ -18,6 +18,7 @@ package com.android.settings.deviceinfo.storage;
 
 import android.app.usage.StorageStatsManager;
 import android.content.Context;
+import android.os.ServiceSpecificException;
 import android.os.UserHandle;
 import android.util.Log;
 
@@ -105,6 +106,11 @@ public class StorageUsageProgressBarPreferenceController extends BasePreferenceC
                 }
             } catch (IOException e) {
                 // The storage device isn't present.
+                mTotalBytes = 0;
+                mUsedBytes = 0;
+            } catch (ServiceSpecificException e) {
+                // The storage service can report a ServiceSpecificException when the volume
+                // isn't fully known to it (e.g. vold cannot report the block device size).
                 mTotalBytes = 0;
                 mUsedBytes = 0;
             }

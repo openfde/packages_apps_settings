@@ -18,6 +18,7 @@ package com.android.settings.deviceinfo.storage;
 
 import android.app.usage.StorageStatsManager;
 import android.content.Context;
+import android.os.ServiceSpecificException;
 import android.os.storage.VolumeInfo;
 
 import androidx.annotation.VisibleForTesting;
@@ -53,6 +54,11 @@ public class VolumeSizesLoader extends AsyncLoaderCompat<PrivateStorageInfo> {
         try {
             volumeSizes = getVolumeSize(mVolumeProvider, mStats, mVolume);
         } catch (IOException e) {
+            return null;
+        } catch (ServiceSpecificException e) {
+            // The storage service can report a ServiceSpecificException (e.g. EINVAL from vold)
+            // when the volume is not fully known to it. Treat it the same as an unavailable
+            // volume so that the AsyncTask doesn't crash the app.
             return null;
         }
         return volumeSizes;
