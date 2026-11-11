@@ -283,11 +283,11 @@ public class SystemNavigationGestureSettings extends RadioButtonPickerFragment i
                 break;
         }
 
-        try {
-            overlayManager.setEnabledExclusiveInCategory(overlayPackage, USER_CURRENT);
-        } catch (RemoteException e) {
-            throw e.rethrowFromSystemServer();
-        }
+        // try {
+        //     overlayManager.setEnabledExclusiveInCategory(overlayPackage, USER_CURRENT);
+        // } catch (RemoteException e) {
+        //     throw e.rethrowFromSystemServer();
+        // }
     }
 
     private void setIllustrationVideo(IllustrationPreference videoPref,

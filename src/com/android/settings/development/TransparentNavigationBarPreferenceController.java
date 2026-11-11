@@ -82,10 +82,10 @@ public class TransparentNavigationBarPreferenceController
 
     @VisibleForTesting
     protected void setEnabled(boolean enabled) {
-        try {
-            mOverlayManager.setEnabled(OVERLAY_PACKAGE_NAME, enabled, USER_CURRENT);
-        } catch (RemoteException e) {
-            throw e.rethrowFromSystemServer();
-        }
+        // try {
+        //     mOverlayManager.setEnabled(OVERLAY_PACKAGE_NAME, enabled, USER_CURRENT);
+        // } catch (RemoteException e) {
+        //     throw e.rethrowFromSystemServer();
+        // }
     }
 }
