@@ -31,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/caption_bar_height"
         android:layout_gravity="top"
-        android:visibility="gone"
+        android:visibility="invisible"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -48,6 +48,7 @@
         android:fontFamily="@font/alibaba_puhui_55_regular_55_regular"
         android:text="@string/settings_label_launcher"
         android:layout_marginLeft="48dp"
+        android:visibility="gone"
         android:textAppearance="?android:attr/textAppearanceListItem"
         android:textColor="@color/settingslib_text_color_primary"/>
 

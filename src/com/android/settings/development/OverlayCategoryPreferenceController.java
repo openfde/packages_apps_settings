@@ -119,17 +119,18 @@ public class OverlayCategoryPreferenceController extends DeveloperOptionsPrefere
         new AsyncTask<Void, Void, Boolean>() {
             @Override
             protected Boolean doInBackground(Void... params) {
-                try {
-                    if (PACKAGE_DEVICE_DEFAULT.equals(packageName)) {
-                        return mOverlayManager.setEnabled(currentPackageName, false, USER_SYSTEM);
-                    } else {
-                        return mOverlayManager.setEnabledExclusiveInCategory(packageName,
-                                USER_SYSTEM);
-                    }
-                } catch (SecurityException | IllegalStateException | RemoteException e) {
-                    Log.w(TAG, "Error enabling overlay.", e);
-                    return false;
-                }
+                // try {
+                //     if (PACKAGE_DEVICE_DEFAULT.equals(packageName)) {
+                //         return mOverlayManager.setEnabled(currentPackageName, false, USER_SYSTEM);
+                //     } else {
+                //         return mOverlayManager.setEnabledExclusiveInCategory(packageName,
+                //                 USER_SYSTEM);
+                //     }
+                // } catch (SecurityException | IllegalStateException | RemoteException e) {
+                //     Log.w(TAG, "Error enabling overlay.", e);
+                //     return false;
+                // }
+                 return false;
             }
 
             @Override

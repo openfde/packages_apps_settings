@@ -369,13 +369,13 @@ public class SettingsHomepageActivity extends FragmentActivity implements
 
     private void updateCationTitle(){
         captionTitle = findViewById(R.id.caption_title);
-        if(captionTitle!=null){
-            if(getTopPackageName().equals(getPackageName())){
-                captionTitle.setVisibility(View.VISIBLE);
-            }else{
-                captionTitle.setVisibility(View.INVISIBLE);
-            }
-        }
+        // if(captionTitle!=null){
+        //     if(getTopPackageName().equals(getPackageName())){
+        //         captionTitle.setVisibility(View.VISIBLE);
+        //     }else{
+        //         captionTitle.setVisibility(View.INVISIBLE);
+        //     }
+        // }
     }
 
     @Override

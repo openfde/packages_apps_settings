@@ -99,20 +99,20 @@ public class ForceEnableNotesRolePreferenceController
 
     @VisibleForTesting
     protected void setEnabled(boolean enabled) {
-        try {
-            for (UserInfo user : mUserManager.getUsers()) {
-                if (user.isFull() || user.isProfile()
-                        || // Enable the overlay in system user for HSUM device. There are multiple
-                        // code paths that query this overlay while HSUM System user is active, see
-                        // b/462400157.
-                        (Flags.enableNoteHsumDevOptionFix()
-                                && UserManager.isHeadlessSystemUserMode()
-                                && user.getUserHandle().isSystem())) {
-                    mOverlayManager.setEnabled(OVERLAY_PACKAGE_NAME, enabled, user.id);
-                }
-            }
-        } catch (RemoteException e) {
-            throw e.rethrowFromSystemServer();
-        }
+        // try {
+        //     for (UserInfo user : mUserManager.getUsers()) {
+        //         if (user.isFull() || user.isProfile()
+        //                 || // Enable the overlay in system user for HSUM device. There are multiple
+        //                 // code paths that query this overlay while HSUM System user is active, see
+        //                 // b/462400157.
+        //                 (Flags.enableNoteHsumDevOptionFix()
+        //                         && UserManager.isHeadlessSystemUserMode()
+        //                         && user.getUserHandle().isSystem())) {
+        //             mOverlayManager.setEnabled(OVERLAY_PACKAGE_NAME, enabled, user.id);
+        //         }
+        //     }
+        // } catch (RemoteException e) {
+        //     throw e.rethrowFromSystemServer();
+        // }
     }
 }
