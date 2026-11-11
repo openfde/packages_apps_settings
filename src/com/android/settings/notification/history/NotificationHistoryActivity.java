@@ -70,6 +70,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import android.view.WindowInsetsController;
 
 public class NotificationHistoryActivity extends CollapsingToolbarBaseActivity {
 
@@ -238,6 +239,17 @@ public class NotificationHistoryActivity extends CollapsingToolbarBaseActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayShowTitleEnabled(true);
+        }
+        setupTransparentCaptionBar();
+    }
+
+    private void setupTransparentCaptionBar() {
+        WindowInsetsController controller = getWindow().getInsetsController();
+        if (controller != null) {
+            controller.setSystemBarsAppearance(
+                    WindowInsetsController.APPEARANCE_TRANSPARENT_CAPTION_BAR_BACKGROUND,
+                    WindowInsetsController.APPEARANCE_TRANSPARENT_CAPTION_BAR_BACKGROUND
+            );
         }
     }
 
