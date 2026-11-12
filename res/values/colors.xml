@@ -345,4 +345,9 @@
     <color name="item_bg"> #F8F8F8 </color>
     <color name="title_text"> #333 </color>
     <color name="summary_text"> #999 </color>
+
+    <!-- FDE pages: consistent list hairline divider (modern Settings style) -->
+    <color name="fde_divider">#1A000000</color>
+    <!-- FDE pages: press / hover feedback overlay -->
+    <color name="fde_pressed">#14000000</color>
 </resources>
