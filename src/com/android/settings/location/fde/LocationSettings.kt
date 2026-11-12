@@ -40,6 +40,8 @@ import android.net.LocalSocketAddress;
 import android.net.LocalSocketAddress.Namespace;
 import android.provider.Settings;
 import java.io.OutputStream;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 
 class LocationSettings : InstrumentedFragment() {
     private val TAG = "LocationSettings"
@@ -85,6 +87,15 @@ class LocationSettings : InstrumentedFragment() {
         spinnerCountry = rootView.findViewById(R.id.spinnerCountry)
         spinnerProvince = rootView.findViewById(R.id.spinnerProvince)
         spinnerCity = rootView.findViewById(R.id.spinnerCity)
+
+        val popupBackground =  GradientDrawable();
+        popupBackground.setColor(getResources().getColor(R.color.item_bg));
+        popupBackground.setCornerRadius(8 * getResources()
+                .getDisplayMetrics().density);
+
+        spinnerCountry?.setPopupBackgroundDrawable(popupBackground);
+        spinnerProvince?.setPopupBackgroundDrawable(popupBackground);
+        spinnerCity?.setPopupBackgroundDrawable(popupBackground);
 
         viewModel = ViewModelProvider(this).get(LocationSettingsViewModel::class.java)
 
