@@ -68,7 +68,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="49dp"
-                    android:background="#fff"
+                    android:background="@color/page_bg"
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:paddingHorizontal="14dp">
@@ -78,7 +78,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center|left"
-                        android:textColor="#d9000000"
+                        android:textColor="@color/title_text"
                         android:textSize="14sp"
                         android:fontFamily="@font/alibaba_puhui_65_medium_65_medium"
                         android:text="@string/open_wifi"  />
@@ -135,7 +135,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#fff"
+                    android:background="@color/page_bg"
                     android:gravity="center"
                     android:orientation="horizontal">
 
@@ -145,7 +145,7 @@
                         android:layout_height="wrap_content"
                         android:padding="14dp"
                         android:text="@string/fde_net_none"
-                        android:textColor="#4d000000"
+                        android:textColor="@color/title_text"
                         android:textSize="14sp"
                         android:fontFamily="@font/alibaba_puhui_55_regular_55_regular"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -204,7 +204,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#fff"
+                    android:background="@color/page_bg"
                     android:gravity="center"
                     android:orientation="horizontal">
 
@@ -214,7 +214,7 @@
                         android:layout_height="wrap_content"
                         android:padding="14dp"
                         android:text="@string/fde_net_none"
-                        android:textColor="#4d000000"
+                        android:textColor="@color/title_text"
                         android:textSize="14sp"
                         android:fontFamily="@font/alibaba_puhui_55_regular_55_regular"
                         app:layout_constraintTop_toTopOf="parent"
@@ -236,10 +236,10 @@
                         android:id="@+id/txtAddWifi"
                         android:text="@string/fde_net_add_networks"
                         android:padding="14dp"
-                        android:textColor="#d9000000"
+                        android:textColor="@color/title_text"
                         android:textSize="14sp"
                         android:fontFamily="@font/alibaba_puhui_55_regular_85_bold"
-                        android:background="#FFF"
+                        android:background="@color/page_bg"
                         android:layout_width="match_parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:layout_height="wrap_content"/>
@@ -273,7 +273,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="49dp"
-                    android:background="#fff"
+                    android:background="@color/page_bg"
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:paddingHorizontal="14dp">
@@ -284,7 +284,7 @@
                         android:layout_weight="1"
                         android:gravity="center|left"
                         android:text="@string/fde_net_networks"
-                        android:textColor="#d9000000"
+                        android:textColor="@color/title_text"
                         android:fontFamily="@font/alibaba_puhui_55_regular_55_regular"
                         android:textSize="14sp" />
 
@@ -331,7 +331,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="1dp"
-                        android:background="#fff"
+                        android:background="@color/page_bg"
                         android:padding="14dp">
 
                         <TextView
@@ -362,7 +362,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="1dp"
-                        android:background="#fff"
+                        android:background="@color/page_bg"
                         android:padding="14dp">
 
                         <TextView
@@ -381,7 +381,6 @@
                             android:layout_alignParentRight="true"
                             android:background="@drawable/custom_spinner_background"
                             android:dropDownVerticalOffset="48dp"
-                            android:entries="@array/spinner_ip"
                             android:gravity="center|right"
                             android:paddingRight="14dp"
                             android:spinnerMode="dropdown"
@@ -394,7 +393,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="1dp"
-                        android:background="#fff"
+                        android:background="@color/page_bg"
                         android:gravity="center"
                         android:orientation="horizontal"
                         android:padding="14dp">
@@ -412,7 +411,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:background="#fff"
+                            android:background="@color/page_bg"
                             android:gravity="right|center"
                             android:hint="input"
                             android:textAppearance="@style/item_child_value" />
@@ -423,7 +422,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="1dp"
-                        android:background="#fff"
+                        android:background="@color/page_bg"
                         android:gravity="center"
                         android:orientation="horizontal"
                         android:padding="14dp">
@@ -441,7 +440,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:background="#fff"
+                            android:background="@color/page_bg"
                             android:gravity="right|center"
                             android:hint="input"
                             android:textAppearance="@style/item_child_value" />
@@ -451,7 +450,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="1dp"
-                        android:background="#fff"
+                        android:background="@color/page_bg"
                         android:gravity="center"
                         android:orientation="horizontal"
                         android:padding="14dp">
@@ -469,7 +468,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:background="#fff"
+                            android:background="@color/page_bg"
                             android:gravity="right|center"
                             android:hint="input"
                             android:textAppearance="@style/item_child_value" />
@@ -479,7 +478,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="1dp"
-                        android:background="#fff"
+                        android:background="@color/page_bg"
                         android:gravity="center"
                         android:orientation="horizontal"
                         android:padding="14dp">
@@ -497,7 +496,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:background="#fff"
+                           android:background="@color/page_bg"
                             android:gravity="right|center"
                             android:textAppearance="@style/item_child_value"
                             android:hint="input" />
@@ -508,7 +507,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="1dp"
-                        android:background="#fff"
+                        android:background="@color/page_bg"
                         android:gravity="center"
                         android:orientation="horizontal"
                         android:padding="14dp">
@@ -526,7 +525,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:background="#fff"
+                            android:background="@color/page_bg"
                             android:gravity="right|center"
                             android:hint="input"
                             android:textAppearance="@style/item_child_value" />
@@ -556,7 +555,7 @@
                     android:gravity="center"
                     android:visibility="gone"
                     android:text="@string/fde_btn_cancel"
-                    android:textColor="#d9000000"
+                    android:textColor="@color/title_text"
                     android:fontFamily="@font/alibaba_puhui_65_medium_65_medium"
                     android:textSize="14sp" />
 

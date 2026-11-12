@@ -47,7 +47,8 @@ import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.provider.Settings
 import android.widget.Toast;
-
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 // import android.net.INetd;
 
 
@@ -156,6 +157,14 @@ class FdeNetworkDashboardFragment : InstrumentedFragment() {
 
         spinnerConfigInterface = rootView.findViewById(R.id.spinnerConfigInterface)
         spinnerIpSettings = rootView.findViewById(R.id.spinnerIpSettings)
+
+        val popupBackground =  GradientDrawable();
+        popupBackground.setColor(getResources().getColor(R.color.item_bg));
+        popupBackground.setCornerRadius(8 * getResources()
+                .getDisplayMetrics().density);
+
+        spinnerConfigInterface?.setPopupBackgroundDrawable(popupBackground);
+        spinnerIpSettings?.setPopupBackgroundDrawable(popupBackground);
 
         editIpAddress = rootView.findViewById(R.id.editIpAddress)
         editDefaultGateway = rootView.findViewById(R.id.editDefaultGateway)
@@ -532,6 +541,18 @@ class FdeNetworkDashboardFragment : InstrumentedFragment() {
             // 设置适配器
             spinnerConfigInterface?.adapter = adapter
         })
+
+        val items = resources.getStringArray(R.array.spinner_ip).toList()
+
+        val adapter = ArrayAdapter(
+            requireContext(),
+            R.layout.spinner_item_selected,
+            items
+        ).apply {
+            setDropDownViewResource(R.layout.spinner_item_dropdown)
+        }
+
+        spinnerIpSettings?.adapter = adapter
     }
 
     fun enableWiredView(enable :Boolean){

@@ -124,5 +124,9 @@
     <color name="sc_materialColorSurfaceContainer">@android:color/system_surface_container_dark</color>
     <color name="sc_materialColorOutline">@android:color/system_outline_dark</color>
     <color name="sc_materialColorOutlineVariant">@android:color/system_outline_variant_dark</color>
+    <color name="item_bg"> #333 </color>
+    <color name="page_bg"> #111 </color>
+    <color name="title_text"> #F4F4F4 </color>
+    <color name="summary_text"> #E4E4E4 </color>
 </resources>
 
