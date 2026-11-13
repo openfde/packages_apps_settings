@@ -23,6 +23,23 @@
         </notes>
         <optionjson>[]</optionjson>
     </compatible>
-
+    <compatible date="2026-11-13" isdel="0">
+        <keycode>forcedPortraitMode</keycode>
+        <keydesc>
+            {
+            "en":"Disable window resizing",
+            "ch":"禁止窗口大小调整"
+            }
+        </keydesc>
+        <defaultvalue>0</defaultvalue>
+        <inputtype>page</inputtype>
+        <notes>
+            {
+            "en":"Disable window resizing: Some applications do not support dynamic resizing",
+            "ch":"禁止窗口大小调整：部分应用不支持动态调整大小"
+            }
+        </notes>
+        <optionjson>[]</optionjson>
+    </compatible>
 
 </compatibles>
