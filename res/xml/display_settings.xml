@@ -52,7 +52,7 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory
+    <!-- <PreferenceCategory
         android:key="category_lock_display"
         android:title="@string/category_name_lock_display"
         android:order="-190">
@@ -86,7 +86,7 @@
             android:summary="@string/summary_placeholder"
             android:fragment="com.android.settings.display.ScreenTimeoutSettings"
             settings:controller="com.android.settings.display.ScreenTimeoutPreferenceController"/>
-    </PreferenceCategory>
+    </PreferenceCategory> -->
 
     <PreferenceCategory
         android:key="category_key_appearance"
@@ -146,22 +146,22 @@
             Standard auto-rotation preference that will be shown when device state based
             auto-rotation settings are NOT available.
           -->
-        <SwitchPreferenceCompat
+        <!-- <SwitchPreferenceCompat
             android:key="auto_rotate"
             android:title="@string/accelerometer_title"
             settings:keywords="@string/keywords_auto_rotate"
-            settings:controller="com.android.settings.display.AutoRotatePreferenceController"/>
+            settings:controller="com.android.settings.display.AutoRotatePreferenceController"/> -->
 
         <!--
             Auto-rotation preference that will be shown when device state based auto-rotation
             settings are available.
           -->
-        <Preference
+        <!-- <Preference
             android:key="device_state_auto_rotate"
             android:title="@string/accelerometer_title"
             android:fragment="com.android.settings.display.DeviceStateAutoRotateDetailsFragment"
             settings:keywords="@string/keywords_auto_rotate"
-            settings:controller="com.android.settings.display.DeviceStateAutoRotateOverviewController"/>
+            settings:controller="com.android.settings.display.DeviceStateAutoRotateOverviewController"/> -->
 
         <Preference
             android:key="screen_resolution"
@@ -186,13 +186,13 @@
             android:key="show_operator_name"
             android:title="@string/show_operator_name_title"
             android:summary="@string/show_operator_name_summary"/>
-
+<!-- 
         <Preference
             android:key="screensaver"
             android:title="@string/screensaver_settings_title"
             android:fragment="com.android.settings.dream.DreamSettings"
             settings:keywords="@string/keywords_screensaver"
-            settings:controller="com.android.settings.display.ScreenSaverPreferenceController"/>
+            settings:controller="com.android.settings.display.ScreenSaverPreferenceController"/> -->
 
         <SwitchPreferenceCompat
             android:key="camera_gesture"
@@ -218,4 +218,8 @@
             android:title="@string/display_vr_pref_title"
             android:fragment="com.android.settings.display.VrDisplayPreferencePicker"/>
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title=""
+        android:order="-100"/>
 </PreferenceScreen>
