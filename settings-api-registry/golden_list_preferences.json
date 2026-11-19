@@ -1372,6 +1372,13 @@
     "type": "int"
   },
   {
+    "preference_key": "dock_bar_height",
+    "file_name": "TextReadingScreen.kt",
+    "screen_key": "text_reading_options",
+    "writable": "False",
+    "type": "int"
+  },
+  {
     "preference_key": "font_weight_adjustment",
     "file_name": "TextReadingScreen.kt",
     "screen_key": "text_reading_options",

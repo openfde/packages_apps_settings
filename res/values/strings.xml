@@ -15680,6 +15680,16 @@
   
     <string name="dock_size" msgid="570613010306330622">"Dock size"</string>
     <string name="short_summary_dock_size" msgid="8444689613442419978">"Make Dock bigger or smaller"</string>
+    <!-- [CHAR LIMIT=30] Display and accessibility settings screens, setting option name to change the dock bar height. -->
+    <string name="dock_bar_height_title">Dock bar height</string>
+    <!-- [CHAR LIMIT=30] Content description of the minus icon on the dock bar height slider. -->
+    <string name="dock_size_make_smaller_desc">Decrease dock bar height</string>
+    <!-- [CHAR LIMIT=30] Content description of the plus icon on the dock bar height slider. -->
+    <string name="dock_size_make_larger_desc">Increase dock bar height</string>
+    <!-- [CHAR LIMIT=NONE] Search keywords for dock bar height. -->
+    <string name="keywords_dock_bar_height">dock bar, dock bar height, dock size, bottom dock</string>
+    <!-- [CHAR LIMIT=NONE] Percentage label shown for the dock bar height slider, e.g. 100%. -->
+    <string name="dock_bar_height_percentage">%1$d%%</string>
     <string name="format_error">" Format error"</string>
     <string name="save_success">Saved successfully</string>
 

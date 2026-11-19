@@ -39,6 +39,9 @@ class TextReadingSetupWizardFragment : BaseSetupWizardFragment() {
             findItem(adapter, R.id.display_size_in_suw)?.let {
                 put(R.id.display_size_in_suw, DisplaySizeSliderItemController.create(context, it))
             }
+            findItem(adapter, R.id.dock_size)?.let {
+                put(R.id.dock_size, DisplaySizeSliderItemController.create(context, it))
+            }
             findItem(adapter, R.id.bold_text_in_suw)?.let {
                 put(R.id.bold_text_in_suw, BoldTextSwitchItemController(context, it))
             }

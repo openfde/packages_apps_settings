@@ -81,6 +81,7 @@ abstract class BaseTextReadingScreen(val isUiOnly: Boolean) : PreferenceScreenMi
                 {
                     +fontSizePreference
                     +displaySizePreference
+                    +DockBarHeightPreference(context, isUiOnly)
                 }
             +PreferenceCategory(
                 key = "text_style",
