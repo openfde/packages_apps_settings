@@ -2467,10 +2467,9 @@
         <activity android:name="Settings$PrivacyDashboardActivity"
                   android:label="@string/privacy_dashboard_title"
                   android:exported="true"
-                  android:documentLaunchMode="always"
                   android:icon="@drawable/ic_settings_privacy">
             <intent-filter>
-                <action android:name="android.settings.PRIVACY_SETTINGS" />
+                <action android:name="android.settings.COMPATIBLE_SETTINGS" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -4387,7 +4386,7 @@
                        android:value="@string/menu_key_apps"/>
         </activity>
 
-        <!-- <activity
+        <activity
             android:name="Settings$SoundSettingsActivity"
             android:label="@string/sound_settings"
             android:icon="@drawable/ic_homepage_sound"
@@ -4412,7 +4411,7 @@
             <meta-data
                 android:name="com.android.settings.PRIMARY_PROFILE_CONTROLLED"
                 android:value="true" />
-        </activity> -->
+        </activity>
 
         <activity
             android:name="Settings$VibrationSettingsActivity"
