@@ -91,6 +91,7 @@ import com.android.settings.connecteddevice.BluetoothDashboardFragment;
 import com.android.settings.connecteddevice.ConnectedDeviceDashboardFragment;
 import com.android.settings.connecteddevice.NfcAndPaymentFragment;
 import com.android.settings.connecteddevice.PreviouslyConnectedDeviceDashboardFragment;
+import com.android.settings.connecteddevice.display.TabbedDisplayPreferenceFragment;
 import com.android.settings.connecteddevice.stylus.StylusUsiDetailsFragment;
 import com.android.settings.connecteddevice.usb.UsbDetailsFragment;
 import com.android.settings.datausage.DataSaverSummary;
@@ -369,6 +370,7 @@ public class SettingsGateway {
             NetworkDashboardFragment.class.getName(),
             FdeNetworkDashboardFragment.class.getName(),
             ConnectedDeviceDashboardFragment.class.getName(),
+            TabbedDisplayPreferenceFragment.class.getName(),
             UsbDetailsFragment.class.getName(),
             AppDashboardFragment.class.getName(),
             WifiCallingDisclaimerFragment.class.getName(),
