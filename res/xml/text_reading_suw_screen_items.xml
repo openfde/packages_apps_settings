@@ -41,6 +41,15 @@
             settings:iconEnd="@drawable/ic_add_24dp"
             settings:iconEndContentDescription="@string/screen_zoom_make_larger_desc" />
 
+        <com.android.settings.accessibility.setupwizard.items.SliderItem
+            android:id="@+id/dock_size"
+            android:title="@string/dock_size"
+            android:summary="@string/short_summary_dock_size"
+            settings:iconStart="@drawable/ic_remove_24dp"
+            settings:iconStartContentDescription="@string/screen_zoom_make_smaller_desc"
+            settings:iconEnd="@drawable/ic_add_24dp"
+            settings:iconEndContentDescription="@string/screen_zoom_make_larger_desc" />    
+
     </SectionItem>
 
     <SectionItem

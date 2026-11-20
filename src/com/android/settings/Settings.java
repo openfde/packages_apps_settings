@@ -165,6 +165,12 @@ public class Settings extends SettingsActivity {
     public static class UserDictionarySettingsActivity extends SettingsActivity { /* empty */ }
     public static class DarkThemeSettingsActivity extends SettingsActivity { /* empty */ }
     public static class DisplaySettingsActivity extends SettingsActivity { /* empty */ }
+    /**
+     * Container for {@link com.android.settings.connecteddevice.display.TabbedDisplayPreferenceFragment}
+     * so that other apps can launch the external display settings page via the
+     * {@code android.settings.EXTERNAL_DISPLAY_SETTINGS} intent.
+     */
+    public static class TabbedDisplaySettingsActivity extends SettingsActivity { /* empty */ }
     public static class NightDisplaySettingsActivity extends SettingsActivity { /* empty */ }
     public static class NightDisplaySuggestionActivity extends NightDisplaySettingsActivity { /* empty */ }
     public static class SmartAutoRotateSettingsActivity extends SettingsActivity { /* empty */ }

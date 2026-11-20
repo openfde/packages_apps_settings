@@ -519,6 +519,7 @@
     <string name="text_reading_options_purpose" translatable="false">Allows users to customize the size of fonts and UI elements, and toggle text styles like bolding and outlining to improve visual accessibility.</string>
     <string name="display_size_purpose" translatable="false">Adjusts the scale of UI elements and items on the screen. Bigger is larger.</string>
     <string name="display_text_size_purpose" translatable="false">display_text_size</string>
+    <string name="dock_bar_height_purpose" translatable="false">Adjusts the height of the dock bar at the bottom of the screen.</string>
     <string name="font_size_purpose" translatable="false">Adjusts the scale of system text. Bigger is larger.</string>
     <string name="font_weight_adjustment_purpose" translatable="false">Whether system text should be displayed in bold.</string>
     <string name="high_text_contrast_enabled_purpose" translatable="false">Whether to add high-contrast outlines to text for better readability.</string>

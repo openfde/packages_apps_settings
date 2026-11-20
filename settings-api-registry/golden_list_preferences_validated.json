@@ -286,6 +286,11 @@
   },
   {
     "screen_key": "text_reading_options",
+    "preference_key": "dock_bar_height",
+    "is_writable": true
+  },
+  {
+    "screen_key": "text_reading_options",
     "preference_key": "font_weight_adjustment",
     "is_writable": true
   },
